@@ -39,7 +39,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ========== 登录页面 ========== */
+        /* 登录页面 */
         .login-overlay {
             position: fixed;
             inset: 0;
@@ -128,29 +128,13 @@
             margin-top: 10px;
             min-height: 20px;
         }
-        .login-card .api-config {
-            margin-top: 16px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            user-select: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: var(--transition);
-        }
-        .login-card .api-config:hover {
-            color: var(--primary);
-        }
-        .login-card .api-url-display {
-            display: block;
+        .login-card .hint {
             font-size: 11px;
-            margin-top: 4px;
-            color: #888;
-            word-break: break-all;
+            color: #999;
+            margin-top: 12px;
         }
 
-        /* ========== 主布局 ========== */
+        /* 主布局 */
         .app-container {
             display: none;
             max-width: 1300px;
@@ -253,18 +237,8 @@
             color: var(--text);
             border-color: var(--border);
         }
-        .btn-icon {
-            width: 34px;
-            height: 34px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 16px;
-        }
 
-        /* ========== 搜索栏 ========== */
+        /* 搜索栏 */
         .search-bar {
             display: flex;
             gap: 10px;
@@ -299,7 +273,7 @@
             white-space: nowrap;
         }
 
-        /* ========== 题目卡片 ========== */
+        /* 题目卡片 */
         .questions-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -457,7 +431,7 @@
             font-size: 16px;
         }
 
-        /* ========== 模态框 ========== */
+        /* 模态框 */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -469,12 +443,8 @@
             animation: fadeIn 0.2s;
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .modal {
             background: #fff;
@@ -488,14 +458,8 @@
             animation: slideUp 0.25s;
         }
         @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .modal h2 {
             font-size: 20px;
@@ -612,26 +576,14 @@
             pointer-events: none;
         }
         @keyframes slideIn {
-            from {
-                transform: translateX(120%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
-        .toast.success {
-            background: #27ae60;
-        }
-        .toast.error {
-            background: #e74c3c;
-        }
-        .toast.info {
-            background: #4f6ef7;
-        }
+        .toast.success { background: #27ae60; }
+        .toast.error { background: #e74c3c; }
+        .toast.info { background: #4f6ef7; }
 
-        /* ========== 图片放大 ========== */
+        /* 图片灯箱 */
         .lightbox {
             position: fixed;
             inset: 0;
@@ -649,48 +601,23 @@
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* ========== 滚动条 ========== */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #c4c9d4;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a0a7b4;
-        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a0a7b4; }
 
         @media (max-width: 768px) {
-            .app-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .search-bar {
-                flex-direction: column;
-            }
-            .search-bar input,
-            .search-bar select {
-                width: 100%;
-                min-width: auto;
-            }
-            .questions-grid {
-                grid-template-columns: 1fr;
-            }
-            .modal {
-                padding: 18px 14px;
-                max-width: 98vw;
-            }
+            .app-header { flex-direction: column; align-items: flex-start; }
+            .search-bar { flex-direction: column; }
+            .search-bar input, .search-bar select { width: 100%; min-width: auto; }
+            .questions-grid { grid-template-columns: 1fr; }
+            .modal { padding: 18px 14px; max-width: 98vw; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ==================== 登录界面 ==================== -->
+    <!-- 登录界面 -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-card">
             <div class="logo-icon">📚</div>
@@ -706,17 +633,12 @@
             </div>
             <button class="btn-login" id="btnLogin">登 录</button>
             <p class="error-msg" id="loginError"></p>
-            <div class="api-config" onclick="setApiUrl()">
-                ⚙️ 配置服务器地址
-            </div>
-            <span class="api-url-display" id="apiUrlDisplay"></span>
-            <p class="hint" style="margin-top:8px;font-size:11px;color:#999;">默认管理员：zlm / zlm20130503</p>
+            <p class="hint">默认管理员：zlm / zlm20130503</p>
         </div>
     </div>
 
-    <!-- ==================== 主应用 ==================== -->
+    <!-- 主应用 -->
     <div class="app-container" id="appContainer">
-        <!-- 头部 -->
         <div class="app-header">
             <div class="header-left">
                 <span class="logo">📚</span>
@@ -726,12 +648,10 @@
                 <span>👤 <strong id="displayUsername"></strong></span>
                 <span class="badge" id="displayRole"></span>
                 <button class="btn btn-outline btn-sm" id="btnAddQuestion" onclick="openAddModal()">➕ 添加题目</button>
-                <button class="btn btn-ghost btn-sm" onclick="setApiUrl()" title="设置API地址">⚙️</button>
                 <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 退出</button>
             </div>
         </div>
 
-        <!-- 搜索栏 -->
         <div class="search-bar">
             <input type="text" id="searchKeyword" placeholder="🔍 搜索题目名称、内容、编号、代码..." oninput="renderQuestions()">
             <select id="filterCategory" onchange="renderQuestions()">
@@ -740,11 +660,10 @@
             <span class="result-count" id="resultCount"></span>
         </div>
 
-        <!-- 题目列表 -->
         <div class="questions-grid" id="questionsGrid"></div>
     </div>
 
-    <!-- ==================== 添加/编辑题目模态框 ==================== -->
+    <!-- 添加/编辑题目模态框 -->
     <div id="questionModal" style="display:none;">
         <div class="modal-overlay" onclick="closeModal()">
             <div class="modal" onclick="event.stopPropagation()">
@@ -791,65 +710,26 @@
         </div>
     </div>
 
-    <!-- ==================== 图片灯箱 ==================== -->
+    <!-- 图片灯箱 -->
     <div id="lightbox" style="display:none;" class="lightbox" onclick="closeLightbox()">
         <img id="lightboxImg" src="" alt="题目图片">
     </div>
 
-    <!-- ==================== Toast容器 ==================== -->
+    <!-- Toast容器 -->
     <div id="toastContainer"></div>
 
     <script>
-        // ==================== 配置 ====================
-        function getApiBaseUrl() {
-            const saved = localStorage.getItem('api_base_url');
-            if (saved) return saved.replace(/\/$/, ''); // 移除末尾斜杠
-            // 默认值：如果当前页面在本地开发环境，自动使用 localhost:3001
-            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                return 'http://localhost:3001';
-            }
-            return ''; // 生产环境必须手动配置
-        }
+        // 🔒 永久API地址
+        const API_BASE_URL = 'https://myzlm.serveousercontent.com';
 
-        let API_BASE_URL = getApiBaseUrl();
-
-        // 显示当前API地址
-        function updateApiUrlDisplay() {
-            const display = document.getElementById('apiUrlDisplay');
-            if (display) {
-                display.textContent = API_BASE_URL ? `当前服务器：${API_BASE_URL}` : '未配置服务器地址，请点击上方链接设置';
-            }
-        }
-
-        // 设置API地址
-        function setApiUrl() {
-            const current = API_BASE_URL || (window.location.hostname === 'localhost' ? 'http://localhost:3001' : '');
-            const newUrl = prompt('请输入题库后端地址（例如 https://your-domain.serveo.net）', current);
-            if (newUrl) {
-                const cleanUrl = newUrl.trim().replace(/\/$/, '');
-                localStorage.setItem('api_base_url', cleanUrl);
-                API_BASE_URL = cleanUrl;
-                updateApiUrlDisplay();
-                showToast('服务器地址已更新，请重新登录', 'info');
-                // 如果已登录，建议刷新
-                if (currentUser) {
-                    handleLogout();
-                }
-            }
-        }
-
-        // ==================== 全局状态 ====================
         let allQuestions = [];
         let allCategories = [];
         let currentUser = null;
-        let tempImages = []; // 编辑时暂存的图片
+        let tempImages = [];
 
-        // ==================== 初始化 ====================
+        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
-            updateApiUrlDisplay();
-            // 检查登录状态
             checkAuth();
-            // 登录按钮事件
             document.getElementById('btnLogin').addEventListener('click', handleLogin);
             document.getElementById('loginPassword').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') handleLogin();
@@ -859,13 +739,8 @@
             });
         });
 
-        // ==================== 认证 ====================
+        // 认证检查
         async function checkAuth() {
-            if (!API_BASE_URL) {
-                showLogin();
-                document.getElementById('loginError').textContent = '请先配置服务器地址';
-                return;
-            }
             try {
                 const res = await fetch(`${API_BASE_URL}/api/me`, {
                     credentials: 'include',
@@ -884,7 +759,7 @@
             } catch (err) {
                 showLogin();
                 console.log('后端服务未连接:', err.message);
-                document.getElementById('loginError').textContent = '无法连接服务器，请检查地址配置';
+                document.getElementById('loginError').textContent = '无法连接服务器';
             }
         }
 
@@ -899,20 +774,11 @@
             document.getElementById('appContainer').classList.add('active');
             document.getElementById('displayUsername').textContent = currentUser.username;
             document.getElementById('displayRole').textContent = currentUser.role === 'admin' ? '管理员' : '用户';
-
-            // 仅管理员显示添加按钮
-            const addBtn = document.getElementById('btnAddQuestion');
-            if (addBtn) {
-                addBtn.style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
-            }
+            document.getElementById('btnAddQuestion').style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
             loadQuestions();
         }
 
         async function handleLogin() {
-            if (!API_BASE_URL) {
-                document.getElementById('loginError').textContent = '请先配置服务器地址（点击下方链接）';
-                return;
-            }
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
             const errorEl = document.getElementById('loginError');
@@ -942,7 +808,7 @@
                     errorEl.textContent = data.error || '登录失败';
                 }
             } catch (err) {
-                errorEl.textContent = '无法连接服务器，请检查地址配置';
+                errorEl.textContent = '无法连接服务器，请检查网络';
                 console.error(err);
             } finally {
                 btn.textContent = '登 录';
@@ -952,10 +818,7 @@
 
         async function handleLogout() {
             try {
-                await fetch(`${API_BASE_URL}/api/logout`, {
-                    method: 'POST',
-                    credentials: 'include',
-                });
+                await fetch(`${API_BASE_URL}/api/logout`, { method: 'POST', credentials: 'include' });
             } catch (e) { /* ignore */ }
             currentUser = null;
             allQuestions = [];
@@ -964,17 +827,10 @@
             showToast('已安全退出', 'info');
         }
 
-        // ==================== 数据加载 ====================
         async function loadQuestions() {
-            if (!API_BASE_URL) return;
             try {
-                const res = await fetch(`${API_BASE_URL}/api/questions`, {
-                    credentials: 'include',
-                });
-                if (res.status === 401) {
-                    handleLogout();
-                    return;
-                }
+                const res = await fetch(`${API_BASE_URL}/api/questions`, { credentials: 'include' });
+                if (res.status === 401) { handleLogout(); return; }
                 if (!res.ok) throw new Error('加载失败');
                 const data = await res.json();
                 allQuestions = data.questions || [];
@@ -992,17 +848,11 @@
             const currentVal = select.value;
             select.innerHTML = '<option value="">📂 全部题库</option>';
             allCategories.forEach(cat => {
-                select.innerHTML +=
-                    `<option value="${escapeHtml(cat)}" ${currentVal===cat?'selected':''}>📂 ${escapeHtml(cat)}</option>`;
+                select.innerHTML += `<option value="${escapeHtml(cat)}" ${currentVal===cat?'selected':''}>📂 ${escapeHtml(cat)}</option>`;
             });
-            // 更新datalist
-            const datalist = document.getElementById('categorySuggestions');
-            if (datalist) {
-                datalist.innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
-            }
+            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
         }
 
-        // ==================== 渲染题目 ====================
         function renderQuestions() {
             const keyword = document.getElementById('searchKeyword').value.trim().toLowerCase();
             const category = document.getElementById('filterCategory').value;
@@ -1017,11 +867,8 @@
                     (q.category && q.category.toLowerCase().includes(keyword))
                 );
             }
-            if (category) {
-                filtered = filtered.filter(q => q.category === category);
-            }
+            if (category) filtered = filtered.filter(q => q.category === category);
 
-            // 排序：按编号或创建时间倒序
             filtered.sort((a, b) => {
                 if (a.number && b.number) return a.number.localeCompare(b.number);
                 return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
@@ -1031,10 +878,9 @@
             const grid = document.getElementById('questionsGrid');
 
             if (filtered.length === 0) {
-                grid.innerHTML = `
-                <div class="empty-state">
-                  <div class="icon">📭</div>
-                  <p>${allQuestions.length===0 ? '还没有题目，点击上方按钮添加吧！' : '没有匹配的题目'}</p>
+                grid.innerHTML = `<div class="empty-state">
+                    <div class="icon">📭</div>
+                    <p>${allQuestions.length===0 ? '还没有题目，点击上方按钮添加吧！' : '没有匹配的题目'}</p>
                 </div>`;
                 return;
             }
@@ -1043,50 +889,36 @@
 
             grid.innerHTML = filtered.map(q => {
                 const imagesHtml = (q.images && q.images.length > 0) ?
-                    `<div class="q-images">${q.images.map(img=>`
-                  <img src="${escapeHtml(img)}" alt="题目图片" 
-                       onclick="openLightbox('${escapeHtml(img)}')" 
-                       loading="lazy" 
-                       onerror="this.style.display='none'">
-                `).join('')}</div>` : '';
-
+                    `<div class="q-images">${q.images.map(img=>`<img src="${escapeHtml(img)}" alt="题目图片" onclick="openLightbox('${escapeHtml(img)}')" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
                 const codeHtml = q.code ?
                     `<div class="code-label">💻 正确代码</div>
-                <div class="q-code" style="position:relative;">
-                  <button class="copy-btn" onclick="copyCode(event, '${escapeJs(q.code)}')">📋 复制</button>
-                  ${escapeHtml(q.code)}
-                </div>` : '';
-
-                const contentHtml = q.content ?
-                    `<div class="q-content">${escapeHtml(q.content)}</div>` : '';
-
+                    <div class="q-code" style="position:relative;">
+                        <button class="copy-btn" onclick="copyCode(event, '${escapeJs(q.code)}')">📋 复制</button>
+                        ${escapeHtml(q.code)}
+                    </div>` : '';
+                const contentHtml = q.content ? `<div class="q-content">${escapeHtml(q.content)}</div>` : '';
                 const actionsHtml = isAdmin ? `
-                  <div class="card-actions">
-                    <button class="btn btn-outline btn-sm" onclick="openEditModal('${q.id}')">✏️ 编辑</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">🗑 删除</button>
-                  </div>` : '';
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="openEditModal('${q.id}')">✏️ 编辑</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">🗑 删除</button>
+                    </div>` : '';
 
-                return `
-                <div class="question-card" data-id="${q.id}">
-                  <div class="card-header">
-                    ${q.number ? `<span class="q-number">#${escapeHtml(q.number)}</span>` : ''}
-                    ${q.category ? `<span class="q-category">📂 ${escapeHtml(q.category)}</span>` : ''}
-                  </div>
-                  <div class="q-name">${escapeHtml(q.name || '未命名题目')}</div>
-                  ${contentHtml}
-                  ${imagesHtml}
-                  ${codeHtml}
-                  ${actionsHtml}
+                return `<div class="question-card" data-id="${q.id}">
+                    <div class="card-header">
+                        ${q.number ? `<span class="q-number">#${escapeHtml(q.number)}</span>` : ''}
+                        ${q.category ? `<span class="q-category">📂 ${escapeHtml(q.category)}</span>` : ''}
+                    </div>
+                    <div class="q-name">${escapeHtml(q.name || '未命名题目')}</div>
+                    ${contentHtml}
+                    ${imagesHtml}
+                    ${codeHtml}
+                    ${actionsHtml}
                 </div>`;
             }).join('');
         }
 
-        // ==================== 添加/编辑 ====================
         function openAddModal() {
-            if (currentUser.role !== 'admin') {
-                showToast('仅管理员可添加题目', 'error');
-                return;
-            }
+            if (currentUser.role !== 'admin') { showToast('仅管理员可添加题目', 'error'); return; }
             document.getElementById('modalTitle').textContent = '➕ 添加题目';
             document.getElementById('editId').value = '';
             document.getElementById('qNumber').value = '';
@@ -1102,16 +934,12 @@
             document.getElementById('questionModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             document.getElementById('qNumber').focus();
-            const datalist = document.getElementById('categorySuggestions');
-            if (datalist) datalist.innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
+            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
         }
 
         function openEditModal(id) {
             const q = allQuestions.find(q => q.id === id);
-            if (!q) {
-                showToast('题目不存在', 'error');
-                return;
-            }
+            if (!q) { showToast('题目不存在', 'error'); return; }
             document.getElementById('modalTitle').textContent = '✏️ 编辑题目';
             document.getElementById('editId').value = q.id;
             document.getElementById('qNumber').value = q.number || '';
@@ -1126,8 +954,7 @@
             updateCharCounts();
             document.getElementById('questionModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
-            const datalist = document.getElementById('categorySuggestions');
-            if (datalist) datalist.innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
+            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
         }
 
         function closeModal() {
@@ -1144,20 +971,10 @@
             const content = document.getElementById('qContent').value.trim();
             const code = document.getElementById('qCode').value.trim();
 
-            if (!number) { showToast('请输入题目编号', 'error');
-                document.getElementById('qNumber').focus(); return; }
-            if (!name) { showToast('请输入题目名称', 'error');
-                document.getElementById('qName').focus(); return; }
+            if (!number) { showToast('请输入题目编号', 'error'); return; }
+            if (!name) { showToast('请输入题目名称', 'error'); return; }
 
-            const questionData = {
-                number,
-                name,
-                category,
-                content,
-                code,
-                images: [...tempImages],
-            };
-
+            const questionData = { number, name, category, content, code, images: [...tempImages] };
             const btnSave = document.getElementById('btnSave');
             btnSave.textContent = '保存中...';
             btnSave.disabled = true;
@@ -1189,8 +1006,7 @@
                     showToast(data.error || '保存失败', 'error');
                 }
             } catch (err) {
-                console.error('保存失败:', err);
-                showToast('保存失败，请检查网络连接', 'error');
+                showToast('保存失败，请检查网络', 'error');
             } finally {
                 btnSave.textContent = '💾 保存';
                 btnSave.disabled = false;
@@ -1213,25 +1029,16 @@
                     showToast(data.error || '删除失败', 'error');
                 }
             } catch (err) {
-                console.error('删除失败:', err);
-                showToast('删除失败，请检查网络连接', 'error');
+                showToast('删除失败，请检查网络', 'error');
             }
         }
 
-        // ==================== 图片处理 ====================
         function handleImageUpload(event) {
             const files = event.target.files;
             if (!files || files.length === 0) return;
-
             Array.from(files).forEach(file => {
-                if (!file.type.startsWith('image/')) {
-                    showToast(`${file.name} 不是图片文件`, 'error');
-                    return;
-                }
-                if (file.size > 10 * 1024 * 1024) {
-                    showToast(`${file.name} 超过10MB限制`, 'error');
-                    return;
-                }
+                if (!file.type.startsWith('image/')) { showToast(`${file.name} 不是图片`, 'error'); return; }
+                if (file.size > 10*1024*1024) { showToast(`${file.name} 超过10MB`, 'error'); return; }
                 compressAndAddImage(file);
             });
             event.target.value = '';
@@ -1243,19 +1050,12 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    const maxWidth = 800;
-                    if (width > maxWidth) {
-                        height = Math.round(height * (maxWidth / width));
-                        width = maxWidth;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    const base64 = canvas.toDataURL('image/jpeg', 0.7);
-                    tempImages.push(base64);
+                    let w = img.width, h = img.height;
+                    const maxW = 800;
+                    if (w > maxW) { h = Math.round(h * (maxW/w)); w = maxW; }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    tempImages.push(canvas.toDataURL('image/jpeg', 0.7));
                     renderImagePreviews();
                 };
                 img.src = e.target.result;
@@ -1266,9 +1066,8 @@
         function addImageUrl() {
             const url = document.getElementById('imageUrlInput').value.trim();
             if (!url) return;
-            if (!url.match(/^https?:\/\/.+/i) && !url.match(/^data:image\//)) {
-                showToast('请输入有效的图片URL（http/https开头）或base64数据', 'error');
-                return;
+            if (!url.match(/^https?:\/\//i) && !url.match(/^data:image\//)) {
+                showToast('请输入有效的图片URL', 'error'); return;
             }
             tempImages.push(url);
             document.getElementById('imageUrlInput').value = '';
@@ -1282,17 +1081,16 @@
 
         function renderImagePreviews() {
             const area = document.getElementById('imagePreviewArea');
-            if (!area) return;
             if (tempImages.length === 0) {
                 area.innerHTML = '<span style="font-size:12px;color:#999;">暂无图片</span>';
                 return;
             }
             area.innerHTML = tempImages.map((img, i) => `
-            <div class="preview-item">
-              <img src="${escapeHtml(img)}" alt="预览${i+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2230%22 y=%2255%22 font-size=%2212%22 fill=%22%23999%22>加载失败</text></svg>'">
-              <button class="remove-img" onclick="removeTempImage(${i})" title="移除">×</button>
-            </div>
-          `).join('');
+                <div class="preview-item">
+                    <img src="${escapeHtml(img)}" alt="预览" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2230%22 y=%2255%22 font-size=%2212%22 fill=%22%23999%22>错误</text></svg>'">
+                    <button class="remove-img" onclick="removeTempImage(${i})">×</button>
+                </div>
+            `).join('');
         }
 
         function openLightbox(src) {
@@ -1300,69 +1098,50 @@
             document.getElementById('lightbox').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
         function closeLightbox() {
             document.getElementById('lightbox').style.display = 'none';
             document.body.style.overflow = '';
         }
-
         function copyCode(event, code) {
             event.stopPropagation();
             navigator.clipboard.writeText(code).then(() => {
                 const btn = event.target;
                 btn.textContent = '✅ 已复制';
                 setTimeout(() => { btn.textContent = '📋 复制'; }, 1500);
-            }).catch(() => {
-                showToast('复制失败，请手动选择代码', 'error');
-            });
+            }).catch(() => showToast('复制失败', 'error'));
         }
 
-        // ==================== 字符计数 ====================
         function updateCharCounts() {
-            const content = document.getElementById('qContent').value;
-            const code = document.getElementById('qCode').value;
-            document.getElementById('contentCharCount').textContent = content.length + ' 字';
-            document.getElementById('codeCharCount').textContent = code.length + ' 字';
+            document.getElementById('contentCharCount').textContent = document.getElementById('qContent').value.length + ' 字';
+            document.getElementById('codeCharCount').textContent = document.getElementById('qCode').value.length + ' 字';
         }
         document.getElementById('qContent').addEventListener('input', updateCharCounts);
         document.getElementById('qCode').addEventListener('input', updateCharCounts);
 
-        // ==================== Toast ====================
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transition = 'opacity 0.3s';
-                setTimeout(() => toast.remove(), 300);
-            }, 2500);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
         }
 
-        // ==================== 工具函数 ====================
         function escapeHtml(str) {
             if (!str) return '';
             const div = document.createElement('div');
             div.textContent = str;
             return div.innerHTML;
         }
-
         function escapeJs(str) {
             if (!str) return '';
-            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(
-                /\r/g, '\\r');
+            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
         }
 
-        // ==================== 键盘快捷键 ====================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                if (document.getElementById('lightbox').style.display === 'flex') {
-                    closeLightbox();
-                } else if (document.getElementById('questionModal').style.display === 'block') {
-                    closeModal();
-                }
+                if (document.getElementById('lightbox').style.display === 'flex') closeLightbox();
+                else if (document.getElementById('questionModal').style.display === 'block') closeModal();
             }
         });
     </script>
