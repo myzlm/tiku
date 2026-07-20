@@ -3,25 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 我的题库管理系统</title>
+    <title>📚 墨韵题库 · 古风科技</title>
     <style>
         :root {
-            --bg: #f0f2f5;
-            --card-bg: #ffffff;
-            --primary: #4f6ef7;
-            --primary-hover: #3b54d4;
-            --danger: #e74c3c;
-            --danger-hover: #c0392b;
-            --success: #27ae60;
-            --text: #2c3e50;
-            --text-secondary: #6b7b8d;
-            --border: #e1e5eb;
-            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --transition: 0.2s ease;
-            --font-mono: 'SF Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+            --bg-deep: #0a0a0f;
+            --bg-card: rgba(20, 18, 30, 0.85);
+            --gold: #d4a853;
+            --gold-light: #f0d078;
+            --gold-dark: #8b6914;
+            --jade: #5a8f7b;
+            --jade-light: #7ec8a0;
+            --ink: #c9b896;
+            --ink-light: #e8dcc8;
+            --red-seal: #c23a2b;
+            --neon-blue: #4da6ff;
+            --neon-purple: #a78bfa;
+            --text: #d4c8b0;
+            --text-dim: #8a8068;
+            --border-gold: rgba(212, 168, 83, 0.35);
+            --shadow-gold: 0 0 20px rgba(212, 168, 83, 0.3);
+            --shadow-neon: 0 0 30px rgba(77, 166, 255, 0.25);
+            --font-cn: 'STSong', 'Songti SC', 'Noto Serif SC', 'SimSun', 'KaiTi', serif;
+            --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            --radius: 4px;
+            --radius-lg: 8px;
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         * {
@@ -30,25 +36,78 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+        /* 粒子画布背景 */
+        #particleCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.7;
         }
 
-        /* 登录页面 */
+        body {
+            font-family: var(--font-cn);
+            background: var(--bg-deep);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 水墨山水背景层 */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 15% 85%, rgba(90, 143, 123, 0.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(212, 168, 83, 0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 50%, rgba(77, 166, 255, 0.04) 0%, transparent 70%),
+                radial-gradient(ellipse at 25% 25%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+        }
+
+        /* 浮动装饰 - 远山轮廓 */
+        .mountains-bg {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.25;
+            background:
+                linear-gradient(175deg, transparent 40%, rgba(30, 28, 40, 0.9) 70%, rgba(20, 18, 28, 0.95) 100%);
+        }
+        .mountains-bg::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 60%;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(90, 143, 123, 0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 65% 70%, rgba(60, 80, 100, 0.25) 0%, transparent 45%),
+                radial-gradient(ellipse at 80% 85%, rgba(40, 50, 60, 0.2) 0%, transparent 40%);
+            border-radius: 50% 50% 0 0;
+            filter: blur(15px);
+        }
+
+        /* 登录覆盖层 */
         .login-overlay {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.4s, visibility 0.4s;
+            background: rgba(6, 6, 14, 0.92);
+            transition: opacity 0.6s, visibility 0.6s;
         }
         .login-overlay.hidden {
             opacity: 0;
@@ -56,228 +115,349 @@
             pointer-events: none;
         }
         .login-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 40px 36px;
-            width: 420px;
-            max-width: 90vw;
-            box-shadow: var(--shadow-lg);
+            position: relative;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-gold);
+            border-radius: var(--radius-lg);
+            padding: 48px 40px;
+            width: 440px;
+            max-width: 92vw;
             text-align: center;
+            z-index: 1;
+            box-shadow: var(--shadow-gold), inset 0 0 60px rgba(212, 168, 83, 0.04);
+            backdrop-filter: blur(20px);
+            animation: cardGlow 3s ease-in-out infinite;
         }
-        .login-card .logo-icon {
-            font-size: 48px;
+        @keyframes cardGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(212, 168, 83, 0.3), 0 0 50px rgba(212, 168, 83, 0.08);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(240, 208, 120, 0.4), 0 0 70px rgba(212, 168, 83, 0.15);
+            }
+        }
+        .login-card .seal-icon {
+            font-size: 56px;
             margin-bottom: 8px;
+            filter: drop-shadow(0 0 12px rgba(212, 168, 83, 0.6));
+            animation: sealFloat 2s ease-in-out infinite;
+        }
+        @keyframes sealFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
         }
         .login-card h1 {
-            font-size: 22px;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--gold-light);
+            letter-spacing: 4px;
             margin-bottom: 4px;
-            color: var(--text);
+            text-shadow: 0 0 30px rgba(240, 208, 120, 0.5);
         }
         .login-card .subtitle {
             font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
+            color: var(--text-dim);
+            margin-bottom: 28px;
+            letter-spacing: 2px;
         }
         .login-card .input-group {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             text-align: left;
         }
         .login-card label {
             display: block;
             font-size: 13px;
             font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text);
+            margin-bottom: 7px;
+            color: var(--ink-light);
+            letter-spacing: 1px;
         }
         .login-card input {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
+            padding: 13px 16px;
+            border: 1.5px solid var(--border-gold);
+            border-radius: var(--radius);
             font-size: 15px;
+            background: rgba(10, 10, 20, 0.6);
+            color: var(--ink-light);
+            font-family: inherit;
+            letter-spacing: 1px;
             transition: var(--transition);
-            background: #fafbfc;
-            color: var(--text);
+            backdrop-filter: blur(5px);
         }
         .login-card input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.1);
-            background: #fff;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 18px rgba(240, 208, 120, 0.35), inset 0 0 10px rgba(212, 168, 83, 0.08);
+            background: rgba(16, 14, 26, 0.8);
         }
         .login-card .btn-login {
             width: 100%;
-            padding: 12px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-sm);
+            padding: 13px;
+            background: linear-gradient(135deg, #8b6914 0%, #b8942e 40%, #d4a853 70%, #8b6914 100%);
+            color: #1a1608;
+            border: 1px solid rgba(240, 208, 120, 0.5);
+            border-radius: var(--radius);
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
+            letter-spacing: 3px;
+            font-family: inherit;
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
             margin-top: 8px;
         }
         .login-card .btn-login:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, #a07d1a 0%, #d4a853 40%, #f0d078 70%, #a07d1a 100%);
+            box-shadow: 0 0 35px rgba(240, 208, 120, 0.55), 0 0 60px rgba(212, 168, 83, 0.25);
+            transform: translateY(-2px);
+        }
+        .login-card .btn-login:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 50px rgba(240, 208, 120, 0.7);
         }
         .login-card .error-msg {
-            color: var(--danger);
+            color: #e85d4a;
             font-size: 13px;
-            margin-top: 10px;
+            margin-top: 12px;
             min-height: 20px;
+            letter-spacing: 1px;
         }
         .login-card .hint {
             font-size: 11px;
-            color: #999;
-            margin-top: 12px;
+            color: var(--text-dim);
+            margin-top: 16px;
+            letter-spacing: 1px;
+            opacity: 0.7;
         }
 
-        /* 主布局 */
+        /* 主应用 */
         .app-container {
             display: none;
-            max-width: 1300px;
+            max-width: 1340px;
             margin: 0 auto;
-            padding: 20px 24px;
+            padding: 24px 28px;
+            position: relative;
+            z-index: 2;
         }
         .app-container.active {
             display: block;
+            animation: fadeUpIn 0.5s ease-out;
+        }
+        @keyframes fadeUpIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .app-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 24px;
-            background: var(--card-bg);
-            padding: 16px 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            gap: 14px;
+            margin-bottom: 26px;
+            background: var(--bg-card);
+            padding: 18px 28px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-gold);
+            box-shadow: var(--shadow-gold), inset 0 0 30px rgba(212, 168, 83, 0.02);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+        .app-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(240, 208, 120, 0.4), transparent);
         }
         .app-header .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
         .app-header .logo {
-            font-size: 28px;
+            font-size: 32px;
+            filter: drop-shadow(0 0 10px rgba(212, 168, 83, 0.5));
+            animation: sealFloat 3s ease-in-out infinite;
         }
         .app-header h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
+            color: var(--gold-light);
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(240, 208, 120, 0.4);
         }
         .app-header .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 14px;
-            color: var(--text-secondary);
+            color: var(--text-dim);
             flex-wrap: wrap;
         }
         .app-header .badge {
-            background: #e8f0fe;
-            color: var(--primary);
-            padding: 4px 10px;
+            background: rgba(90, 143, 123, 0.2);
+            color: var(--jade-light);
+            padding: 5px 14px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
+            border: 1px solid rgba(90, 143, 123, 0.4);
+            letter-spacing: 1px;
         }
         .btn {
-            padding: 9px 18px;
+            padding: 10px 20px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            letter-spacing: 1.5px;
+            font-family: inherit;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+        .btn:hover::after {
+            opacity: 1;
+        }
+        .btn:active {
+            transform: scale(0.94);
+            transition: transform 0.1s;
         }
         .btn-primary {
-            background: var(--primary);
-            color: #fff;
+            background: linear-gradient(135deg, #5a3e0e 0%, #8b6914 50%, #5a3e0e 100%);
+            color: #f0d078;
+            border: 1px solid rgba(240, 208, 120, 0.5);
+            box-shadow: 0 0 15px rgba(212, 168, 83, 0.25);
         }
         .btn-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
+            box-shadow: 0 0 30px rgba(240, 208, 120, 0.5), 0 0 50px rgba(212, 168, 83, 0.2);
+            transform: translateY(-2px);
         }
         .btn-outline {
-            background: #fff;
-            color: var(--primary);
-            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--gold-light);
+            border: 1.5px solid var(--border-gold);
+            box-shadow: 0 0 10px rgba(212, 168, 83, 0.1);
         }
         .btn-outline:hover {
-            background: #f5f7ff;
+            background: rgba(212, 168, 83, 0.08);
+            box-shadow: 0 0 22px rgba(240, 208, 120, 0.3);
+            border-color: rgba(240, 208, 120, 0.6);
         }
         .btn-danger {
-            background: #fff;
-            color: var(--danger);
-            border: 2px solid var(--danger);
+            background: transparent;
+            color: #e85d4a;
+            border: 1.5px solid rgba(200, 60, 40, 0.5);
+            box-shadow: 0 0 10px rgba(200, 60, 40, 0.1);
         }
         .btn-danger:hover {
-            background: #fff5f5;
+            background: rgba(200, 60, 40, 0.08);
+            box-shadow: 0 0 22px rgba(200, 60, 40, 0.35);
+            border-color: rgba(200, 60, 40, 0.7);
         }
         .btn-sm {
-            padding: 5px 12px;
+            padding: 6px 14px;
             font-size: 12px;
-            border-radius: 6px;
+            letter-spacing: 1px;
+            border-radius: 3px;
         }
         .btn-ghost {
             background: transparent;
-            color: var(--text-secondary);
+            color: var(--text-dim);
             border: 1px solid transparent;
-            padding: 6px 10px;
+            padding: 7px 12px;
         }
         .btn-ghost:hover {
-            background: #f5f6f8;
-            color: var(--text);
-            border-color: var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--ink-light);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         /* 搜索栏 */
         .search-bar {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             align-items: center;
         }
         .search-bar input,
         .search-bar select {
-            padding: 10px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
+            padding: 11px 16px;
+            border: 1.5px solid var(--border-gold);
+            border-radius: var(--radius);
             font-size: 14px;
-            background: #fff;
-            color: var(--text);
+            background: rgba(16, 14, 26, 0.7);
+            color: var(--ink-light);
+            font-family: inherit;
+            letter-spacing: 1px;
             transition: var(--transition);
+            backdrop-filter: blur(8px);
             min-width: 140px;
         }
         .search-bar input:focus,
         .search-bar select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.08);
+            border-color: var(--gold-light);
+            box-shadow: 0 0 16px rgba(240, 208, 120, 0.3), inset 0 0 8px rgba(212, 168, 83, 0.05);
         }
         .search-bar input {
             flex: 1;
             min-width: 200px;
         }
+        .search-bar select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23d4a853'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
         .search-bar .result-count {
             font-size: 13px;
-            color: var(--text-secondary);
+            color: var(--text-dim);
             white-space: nowrap;
+            letter-spacing: 1px;
         }
 
-        /* 题目卡片 */
+        /* 题目卡片网格 */
         .questions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 18px;
             margin-bottom: 24px;
         }
         @media (max-width: 500px) {
@@ -286,146 +466,193 @@
             }
         }
         .question-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 22px 20px;
             transition: var(--transition);
-            border: 2px solid transparent;
+            border: 1px solid var(--border-gold);
             position: relative;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            cursor: default;
+            overflow: hidden;
+        }
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(240, 208, 120, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
         }
         .question-card:hover {
-            box-shadow: var(--shadow-lg);
-            border-color: #dce3f0;
-            transform: translateY(-2px);
+            border-color: rgba(240, 208, 120, 0.6);
+            box-shadow: 0 0 30px rgba(240, 208, 120, 0.2), 0 0 60px rgba(212, 168, 83, 0.08);
+            transform: translateY(-3px);
+        }
+        .question-card:active {
+            transform: scale(0.98);
+            transition: transform 0.1s;
         }
         .question-card .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             gap: 8px;
+            position: relative;
+            z-index: 1;
         }
         .question-card .q-number {
             font-family: var(--font-mono);
             font-weight: 700;
-            font-size: 13px;
-            color: var(--primary);
-            background: #eef2ff;
-            padding: 3px 10px;
+            font-size: 12px;
+            color: var(--gold-light);
+            background: rgba(212, 168, 83, 0.12);
+            padding: 4px 12px;
             border-radius: 20px;
             white-space: nowrap;
+            letter-spacing: 1px;
+            border: 1px solid rgba(212, 168, 83, 0.3);
         }
         .question-card .q-category {
-            font-size: 12px;
-            background: #f0fdf4;
-            color: #15803d;
-            padding: 3px 10px;
+            font-size: 11px;
+            background: rgba(90, 143, 123, 0.15);
+            color: var(--jade-light);
+            padding: 4px 12px;
             border-radius: 20px;
             font-weight: 500;
             white-space: nowrap;
+            letter-spacing: 1px;
+            border: 1px solid rgba(90, 143, 123, 0.3);
         }
         .question-card .q-name {
             font-size: 17px;
             font-weight: 700;
-            color: var(--text);
-            line-height: 1.4;
+            color: var(--ink-light);
+            line-height: 1.5;
             flex: 1;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
         }
         .question-card .q-content {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.7;
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.8;
             white-space: pre-wrap;
             word-break: break-word;
-            max-height: 120px;
+            max-height: 110px;
             overflow-y: auto;
-            background: #fafbfc;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 3px solid #e1e5eb;
+            background: rgba(10, 10, 20, 0.4);
+            padding: 12px 14px;
+            border-radius: 4px;
+            border-left: 2px solid rgba(212, 168, 83, 0.4);
+            position: relative;
+            z-index: 1;
         }
         .question-card .q-images {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
         .question-card .q-images img {
             max-width: 100%;
-            max-height: 200px;
-            border-radius: 6px;
+            max-height: 180px;
+            border-radius: 4px;
             cursor: pointer;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(212, 168, 83, 0.3);
             object-fit: contain;
-            background: #fafafa;
+            background: rgba(10, 10, 20, 0.5);
             transition: var(--transition);
         }
         .question-card .q-images img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            border-color: var(--gold-light);
+            box-shadow: 0 0 20px rgba(240, 208, 120, 0.35);
+            transform: scale(1.03);
         }
         .question-card .q-code {
             font-family: var(--font-mono);
-            font-size: 13px;
-            background: #1e1e2e;
-            color: #cdd6f4;
-            padding: 12px 14px;
-            border-radius: 6px;
+            font-size: 12px;
+            background: rgba(6, 8, 16, 0.85);
+            color: #c9d1d9;
+            padding: 14px 16px;
+            border-radius: 4px;
             overflow-x: auto;
             white-space: pre-wrap;
             word-break: break-all;
-            max-height: 150px;
+            max-height: 140px;
             overflow-y: auto;
             position: relative;
-            line-height: 1.5;
+            line-height: 1.6;
+            border: 1px solid rgba(77, 166, 255, 0.25);
+            box-shadow: inset 0 0 20px rgba(77, 166, 255, 0.05);
+            z-index: 1;
         }
         .question-card .code-label {
             font-size: 11px;
-            color: #a0a8c0;
+            color: var(--neon-blue);
             margin-bottom: 2px;
             display: flex;
             align-items: center;
             gap: 6px;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
         .question-card .copy-btn {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            color: #cdd6f4;
-            border: none;
-            padding: 4px 10px;
-            border-radius: 4px;
+            background: rgba(77, 166, 255, 0.2);
+            color: #8cc8ff;
+            border: 1px solid rgba(77, 166, 255, 0.35);
+            padding: 5px 12px;
+            border-radius: 3px;
             font-size: 11px;
             cursor: pointer;
             transition: var(--transition);
             opacity: 0;
+            letter-spacing: 1px;
+            font-family: inherit;
+            z-index: 2;
         }
         .question-card .q-code:hover .copy-btn {
             opacity: 1;
         }
         .question-card .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(77, 166, 255, 0.4);
+            box-shadow: 0 0 15px rgba(77, 166, 255, 0.4);
         }
         .question-card .card-actions {
             display: flex;
             gap: 8px;
             margin-top: auto;
-            padding-top: 8px;
-            border-top: 1px solid var(--border);
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
             justify-content: flex-end;
+            position: relative;
+            z-index: 1;
         }
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
+            padding: 80px 20px;
+            color: var(--text-dim);
             grid-column: 1 / -1;
+            letter-spacing: 2px;
         }
         .empty-state .icon {
-            font-size: 64px;
-            margin-bottom: 16px;
+            font-size: 72px;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 0 20px rgba(212, 168, 83, 0.4));
+            animation: sealFloat 3s ease-in-out infinite;
         }
         .empty-state p {
             font-size: 16px;
@@ -435,38 +662,54 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(4, 4, 12, 0.85);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: fadeIn 0.2s;
+            animation: fadeIn 0.25s;
+            backdrop-filter: blur(3px);
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         .modal {
-            background: #fff;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            width: 700px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1.5px solid var(--border-gold);
+            box-shadow: var(--shadow-gold), 0 0 80px rgba(212, 168, 83, 0.1);
+            width: 720px;
             max-width: 95vw;
-            max-height: 90vh;
+            max-height: 88vh;
             overflow-y: auto;
-            padding: 28px 24px;
-            animation: slideUp 0.25s;
+            padding: 30px 26px;
+            animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(20px);
         }
         @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
         .modal h2 {
             font-size: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            color: var(--gold-light);
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(240, 208, 120, 0.3);
         }
         .modal .form-group {
             margin-bottom: 16px;
@@ -475,42 +718,43 @@
             display: block;
             font-weight: 600;
             font-size: 13px;
-            margin-bottom: 5px;
-            color: var(--text);
+            margin-bottom: 6px;
+            color: var(--ink-light);
+            letter-spacing: 1.5px;
         }
         .modal input[type="text"],
         .modal textarea,
         .modal select {
             width: 100%;
-            padding: 10px 14px;
-            border: 2px solid var(--border);
-            border-radius: var(--radius-sm);
+            padding: 11px 15px;
+            border: 1.5px solid var(--border-gold);
+            border-radius: var(--radius);
             font-size: 14px;
             font-family: inherit;
             transition: var(--transition);
-            background: #fafbfc;
-            color: var(--text);
+            background: rgba(10, 10, 20, 0.6);
+            color: var(--ink-light);
+            letter-spacing: 1px;
             resize: vertical;
         }
         .modal input:focus,
         .modal textarea:focus,
         .modal select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.08);
-            background: #fff;
+            border-color: var(--gold-light);
+            box-shadow: 0 0 16px rgba(240, 208, 120, 0.3), inset 0 0 8px rgba(212, 168, 83, 0.05);
         }
         .modal textarea {
             min-height: 100px;
-            font-family: inherit;
         }
         .modal textarea.code-textarea {
             font-family: var(--font-mono);
-            min-height: 140px;
-            background: #1e1e2e;
-            color: #cdd6f4;
-            border-color: #333;
+            min-height: 150px;
+            background: rgba(6, 8, 16, 0.9);
+            color: #c9d1d9;
+            border-color: rgba(77, 166, 255, 0.35);
             tab-size: 4;
+            box-shadow: inset 0 0 25px rgba(77, 166, 255, 0.04);
         }
         .modal .image-preview-area {
             display: flex;
@@ -522,10 +766,10 @@
             position: relative;
             width: 100px;
             height: 100px;
-            border-radius: 6px;
+            border-radius: 4px;
             overflow: hidden;
-            border: 2px solid var(--border);
-            background: #fafafa;
+            border: 1.5px solid var(--border-gold);
+            background: rgba(10, 10, 20, 0.6);
         }
         .modal .image-preview-area .preview-item img {
             width: 100%;
@@ -534,9 +778,9 @@
         }
         .modal .image-preview-area .preview-item .remove-img {
             position: absolute;
-            top: 2px;
-            right: 2px;
-            background: rgba(231, 76, 60, 0.9);
+            top: 3px;
+            right: 3px;
+            background: rgba(200, 60, 40, 0.85);
             color: #fff;
             border: none;
             width: 22px;
@@ -547,93 +791,156 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: var(--transition);
+        }
+        .modal .image-preview-area .preview-item .remove-img:hover {
+            background: rgba(230, 70, 50, 1);
+            box-shadow: 0 0 12px rgba(200, 60, 40, 0.5);
         }
         .modal .modal-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: 22px;
             flex-wrap: wrap;
         }
         .modal .char-count {
             font-size: 11px;
-            color: var(--text-secondary);
+            color: var(--text-dim);
             text-align: right;
-            margin-top: 2px;
+            margin-top: 3px;
+            letter-spacing: 1px;
         }
+
+        /* Toast */
         .toast {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 22px;
+            right: 22px;
             z-index: 9999;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 13px 22px;
+            border-radius: var(--radius);
             color: #fff;
             font-weight: 600;
             font-size: 14px;
-            animation: slideIn 0.3s;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1.5px;
+            font-family: inherit;
+            animation: slideIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
             pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         @keyframes slideIn {
-            from { transform: translateX(120%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(130%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
-        .toast.success { background: #27ae60; }
-        .toast.error { background: #e74c3c; }
-        .toast.info { background: #4f6ef7; }
+        .toast.success {
+            background: linear-gradient(135deg, #2d5a3d 0%, #3d7a52 100%);
+            border-color: rgba(126, 200, 160, 0.5);
+        }
+        .toast.error {
+            background: linear-gradient(135deg, #5a2d2d 0%, #7a3d3d 100%);
+            border-color: rgba(200, 120, 120, 0.5);
+        }
+        .toast.info {
+            background: linear-gradient(135deg, #2d3d5a 0%, #3d5280 100%);
+            border-color: rgba(120, 160, 200, 0.5);
+        }
 
-        /* 图片灯箱 */
+        /* 灯箱 */
         .lightbox {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(2, 2, 10, 0.92);
             z-index: 10000;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.2s;
         }
         .lightbox img {
             max-width: 90vw;
             max-height: 90vh;
-            border-radius: 8px;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            box-shadow: 0 0 60px rgba(240, 208, 120, 0.3), 0 0 120px rgba(212, 168, 83, 0.1);
+            border: 2px solid rgba(212, 168, 83, 0.5);
         }
 
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #c4c9d4; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a0a7b4; }
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 10, 20, 0.4);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(212, 168, 83, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 168, 83, 0.5);
+        }
 
         @media (max-width: 768px) {
-            .app-header { flex-direction: column; align-items: flex-start; }
-            .search-bar { flex-direction: column; }
-            .search-bar input, .search-bar select { width: 100%; min-width: auto; }
-            .questions-grid { grid-template-columns: 1fr; }
-            .modal { padding: 18px 14px; max-width: 98vw; }
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-bar {
+                flex-direction: column;
+            }
+            .search-bar input,
+            .search-bar select {
+                width: 100%;
+                min-width: auto;
+            }
+            .questions-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal {
+                padding: 18px 14px;
+                max-width: 98vw;
+            }
+            .login-card {
+                padding: 32px 22px;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- 粒子画布 -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- 远山背景 -->
+    <div class="mountains-bg"></div>
+
     <!-- 登录界面 -->
     <div class="login-overlay" id="loginOverlay">
-        <div class="login-card">
-            <div class="logo-icon">📚</div>
-            <h1>我的题库</h1>
-            <p class="subtitle">安全题库管理系统</p>
+        <div class="login-card" id="loginCard">
+            <div class="seal-icon">🏮</div>
+            <h1>墨 韵 题 库</h1>
+            <p class="subtitle">· 古风雅韵 · 科技之光 ·</p>
             <div class="input-group">
-                <label>👤 账号</label>
+                <label>👤 道号</label>
                 <input type="text" id="loginUsername" placeholder="请输入账号" autocomplete="username">
             </div>
             <div class="input-group">
-                <label>🔒 密码</label>
+                <label>🔑 秘钥</label>
                 <input type="password" id="loginPassword" placeholder="请输入密码" autocomplete="current-password">
             </div>
-            <button class="btn-login" id="btnLogin">登 录</button>
+            <button class="btn-login" id="btnLogin">开 启 卷 轴</button>
             <p class="error-msg" id="loginError"></p>
-            <p class="hint">默认管理员：zlm / zlm20130503</p>
+            <p class="hint">默认道号：zlm / 秘钥：zlm20130503</p>
         </div>
     </div>
 
@@ -641,21 +948,21 @@
     <div class="app-container" id="appContainer">
         <div class="app-header">
             <div class="header-left">
-                <span class="logo">📚</span>
-                <h1>我的题库</h1>
+                <span class="logo">🏮</span>
+                <h1>墨韵题库</h1>
             </div>
             <div class="user-info">
-                <span>👤 <strong id="displayUsername"></strong></span>
+                <span>📜 <strong id="displayUsername"></strong></span>
                 <span class="badge" id="displayRole"></span>
-                <button class="btn btn-outline btn-sm" id="btnAddQuestion" onclick="openAddModal()">➕ 添加题目</button>
-                <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 退出</button>
+                <button class="btn btn-outline btn-sm" id="btnAddQuestion" onclick="openAddModal()">➕ 录入新题</button>
+                <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 归隐</button>
             </div>
         </div>
 
         <div class="search-bar">
-            <input type="text" id="searchKeyword" placeholder="🔍 搜索题目名称、内容、编号、代码..." oninput="renderQuestions()">
+            <input type="text" id="searchKeyword" placeholder="🔍 搜题目、编号、内容、代码…" oninput="renderQuestions()">
             <select id="filterCategory" onchange="renderQuestions()">
-                <option value="">📂 全部题库</option>
+                <option value="">📂 万卷归宗</option>
             </select>
             <span class="result-count" id="resultCount"></span>
         </div>
@@ -663,35 +970,35 @@
         <div class="questions-grid" id="questionsGrid"></div>
     </div>
 
-    <!-- 添加/编辑题目模态框 -->
+    <!-- 模态框 -->
     <div id="questionModal" style="display:none;">
         <div class="modal-overlay" onclick="closeModal()">
             <div class="modal" onclick="event.stopPropagation()">
-                <h2 id="modalTitle">➕ 添加题目</h2>
+                <h2 id="modalTitle">📜 录入新题</h2>
                 <input type="hidden" id="editId">
                 <div class="form-group">
-                    <label>📌 题目编号 <span style="color:#e74c3c;">*</span></label>
+                    <label>📌 题号 <span style="color:#e85d4a;">*</span></label>
                     <input type="text" id="qNumber" placeholder="例如：LC001、ALG-1001">
                 </div>
                 <div class="form-group">
-                    <label>📝 题目名称 <span style="color:#e74c3c;">*</span></label>
+                    <label>📝 题名 <span style="color:#e85d4a;">*</span></label>
                     <input type="text" id="qName" placeholder="输入题目名称">
                 </div>
                 <div class="form-group">
-                    <label>📂 所属题库</label>
+                    <label>📂 所属卷宗</label>
                     <input type="text" id="qCategory" placeholder="例如：LeetCode、算法、数据结构" list="categorySuggestions">
                     <datalist id="categorySuggestions"></datalist>
                 </div>
                 <div class="form-group">
-                    <label>📄 题目内容（支持文字描述）</label>
-                    <textarea id="qContent" rows="4" placeholder="输入题目详细内容..."></textarea>
+                    <label>📄 题目内容</label>
+                    <textarea id="qContent" rows="4" placeholder="输入题目详细内容…"></textarea>
                     <div class="char-count" id="contentCharCount">0 字</div>
                 </div>
                 <div class="form-group">
-                    <label>🖼️ 题目图片（可选，点击上传或粘贴URL）</label>
+                    <label>🖼️ 题目图卷（可选）</label>
                     <div style="display:flex;gap:8px;flex-wrap:wrap;">
                         <input type="file" id="imageFileInput" accept="image/*" multiple style="display:none;" onchange="handleImageUpload(event)">
-                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('imageFileInput').click()">📁 上传图片</button>
+                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('imageFileInput').click()">📁 上传图卷</button>
                         <input type="text" id="imageUrlInput" placeholder="或粘贴图片URL" style="flex:1;min-width:150px;" onkeydown="if(event.key==='Enter'){addImageUrl();event.preventDefault();}">
                         <button class="btn btn-primary btn-sm" onclick="addImageUrl()">添加</button>
                     </div>
@@ -699,20 +1006,20 @@
                 </div>
                 <div class="form-group">
                     <label>💻 正确代码</label>
-                    <textarea id="qCode" class="code-textarea" rows="6" placeholder="输入正确代码..."></textarea>
+                    <textarea id="qCode" class="code-textarea" rows="6" placeholder="输入正确代码…"></textarea>
                     <div class="char-count" id="codeCharCount">0 字</div>
                 </div>
                 <div class="modal-actions">
                     <button class="btn btn-outline" onclick="closeModal()">取消</button>
-                    <button class="btn btn-primary" id="btnSave" onclick="saveQuestion()">💾 保存</button>
+                    <button class="btn btn-primary" id="btnSave" onclick="saveQuestion()">💾 收录入库</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 图片灯箱 -->
+    <!-- 灯箱 -->
     <div id="lightbox" style="display:none;" class="lightbox" onclick="closeLightbox()">
-        <img id="lightboxImg" src="" alt="题目图片">
+        <img id="lightboxImg" src="" alt="题目图卷">
     </div>
 
     <!-- Toast容器 -->
@@ -727,7 +1034,145 @@
         let currentUser = null;
         let tempImages = [];
 
-        // 初始化
+        // ==================== 粒子系统 ====================
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouseParticles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.5 + 0.15;
+                this.fadeSpeed = Math.random() * 0.005 + 0.002;
+                this.hue = Math.random() < 0.6 ? 42 : Math.random() < 0.5 ? 200 : 270;
+                this.glow = Math.random() < 0.3;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity += (Math.random() - 0.5) * this.fadeSpeed;
+                this.opacity = Math.max(0.08, Math.min(0.6, this.opacity));
+                if (this.x < -10) this.x = canvas.width + 10;
+                if (this.x > canvas.width + 10) this.x = -10;
+                if (this.y < -10) this.y = canvas.height + 10;
+                if (this.y > canvas.height + 10) this.y = -10;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                const alpha = this.opacity;
+                if (this.glow) {
+                    ctx.fillStyle = `hsla(${this.hue}, 60%, 65%, ${alpha})`;
+                    ctx.shadowColor = `hsla(${this.hue}, 70%, 60%, ${alpha * 0.8})`;
+                    ctx.shadowBlur = 6;
+                } else {
+                    ctx.fillStyle = `hsla(${this.hue}, 40%, 55%, ${alpha})`;
+                    ctx.shadowBlur = 0;
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        class BurstParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4 + 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.life = 1;
+                this.decay = Math.random() * 0.03 + 0.015;
+                this.size = Math.random() * 3 + 1;
+                this.hue = Math.random() < 0.5 ? 42 : 35;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.06;
+                this.life -= this.decay;
+                this.size *= 0.985;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 80%, 60%, ${this.life})`;
+                ctx.shadowColor = `hsla(${this.hue}, 90%, 55%, ${this.life * 0.7})`;
+                ctx.shadowBlur = 10;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+            get dead() { return this.life <= 0; }
+        }
+
+        // 初始化粒子
+        for (let i = 0; i < 80; i++) {
+            particles.push(new Particle());
+        }
+
+        // 点击爆发粒子
+        function burstAt(x, y) {
+            for (let i = 0; i < 20; i++) {
+                mouseParticles.push(new BurstParticle(x, y));
+            }
+        }
+
+        // 全局点击监听 - 墨点扩散特效
+        document.addEventListener('click', function(e) {
+            burstAt(e.clientX, e.clientY);
+            // 创建墨点DOM元素
+            const inkDot = document.createElement('div');
+            inkDot.style.cssText = `
+            position: fixed;
+            left: ${e.clientX - 20}px;
+            top: ${e.clientY - 20}px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            background: radial-gradient(circle, rgba(240,208,120,0.7) 0%, rgba(212,168,83,0.3) 30%, transparent 70%);
+            animation: inkSpread 0.8s ease-out forwards;
+          `;
+            document.body.appendChild(inkDot);
+            setTimeout(() => inkDot.remove(), 800);
+        });
+
+        // 墨点扩散动画
+        const inkStyle = document.createElement('style');
+        inkStyle.textContent = `
+          @keyframes inkSpread {
+            0% { transform: scale(0.3); opacity: 1; }
+            100% { transform: scale(3.5); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(inkStyle);
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update();
+                p.draw(); });
+            mouseParticles.forEach(p => { p.update();
+                p.draw(); });
+            mouseParticles = mouseParticles.filter(p => !p.dead);
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ==================== 初始化 ====================
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             document.getElementById('btnLogin').addEventListener('click', handleLogin);
@@ -737,28 +1182,20 @@
             document.getElementById('loginUsername').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') document.getElementById('loginPassword').focus();
             });
+            document.getElementById('qContent').addEventListener('input', updateCharCounts);
+            document.getElementById('qCode').addEventListener('input', updateCharCounts);
         });
 
-        // 认证检查
         async function checkAuth() {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/me`, {
-                    credentials: 'include',
-                });
+                const res = await fetch(`${API_BASE_URL}/api/me`, { credentials: 'include' });
                 if (res.ok) {
                     const data = await res.json();
-                    if (data && data.username) {
-                        currentUser = data;
-                        showApp();
-                    } else {
-                        showLogin();
-                    }
-                } else {
-                    showLogin();
-                }
+                    if (data && data.username) { currentUser = data;
+                        showApp(); } else { showLogin(); }
+                } else { showLogin(); }
             } catch (err) {
                 showLogin();
-                console.log('后端服务未连接:', err.message);
                 document.getElementById('loginError').textContent = '无法连接服务器';
             }
         }
@@ -766,15 +1203,15 @@
         function showLogin() {
             document.getElementById('loginOverlay').classList.remove('hidden');
             document.getElementById('appContainer').classList.remove('active');
-            document.getElementById('loginError').textContent = '';
         }
 
         function showApp() {
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('appContainer').classList.add('active');
             document.getElementById('displayUsername').textContent = currentUser.username;
-            document.getElementById('displayRole').textContent = currentUser.role === 'admin' ? '管理员' : '用户';
-            document.getElementById('btnAddQuestion').style.display = currentUser.role === 'admin' ? 'inline-flex' : 'none';
+            document.getElementById('displayRole').textContent = currentUser.role === 'admin' ? '掌门' : '弟子';
+            document.getElementById('btnAddQuestion').style.display = currentUser.role === 'admin' ? 'inline-flex' :
+                'none';
             loadQuestions();
         }
 
@@ -782,16 +1219,11 @@
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
             const errorEl = document.getElementById('loginError');
-
-            if (!username || !password) {
-                errorEl.textContent = '请输入账号和密码';
-                return;
-            }
+            if (!username || !password) { errorEl.textContent = '请输入道号和秘钥'; return; }
             errorEl.textContent = '';
             const btn = document.getElementById('btnLogin');
-            btn.textContent = '登录中...';
+            btn.textContent = '开启中…';
             btn.disabled = true;
-
             try {
                 const res = await fetch(`${API_BASE_URL}/api/login`, {
                     method: 'POST',
@@ -803,28 +1235,25 @@
                 if (res.ok && data.username) {
                     currentUser = { username: data.username, role: data.role };
                     showApp();
-                    showToast('登录成功！欢迎回来 👋', 'success');
+                    showToast('卷轴已开启，欢迎归来 🏮', 'success');
                 } else {
                     errorEl.textContent = data.error || '登录失败';
                 }
             } catch (err) {
-                errorEl.textContent = '无法连接服务器，请检查网络';
-                console.error(err);
+                errorEl.textContent = '无法连接服务器';
             } finally {
-                btn.textContent = '登 录';
+                btn.textContent = '开 启 卷 轴';
                 btn.disabled = false;
             }
         }
 
         async function handleLogout() {
-            try {
-                await fetch(`${API_BASE_URL}/api/logout`, { method: 'POST', credentials: 'include' });
-            } catch (e) { /* ignore */ }
+            try { await fetch(`${API_BASE_URL}/api/logout`, { method: 'POST', credentials: 'include' }); } catch (e) {}
             currentUser = null;
             allQuestions = [];
             allCategories = [];
             showLogin();
-            showToast('已安全退出', 'info');
+            showToast('已归隐山林 🌿', 'info');
         }
 
         async function loadQuestions() {
@@ -838,95 +1267,57 @@
                 updateCategoryFilter();
                 renderQuestions();
             } catch (err) {
-                console.error('加载题目失败:', err);
-                showToast('加载题目失败，请检查后端连接', 'error');
+                showToast('加载题目失败', 'error');
             }
         }
 
         function updateCategoryFilter() {
             const select = document.getElementById('filterCategory');
-            const currentVal = select.value;
-            select.innerHTML = '<option value="">📂 全部题库</option>';
-            allCategories.forEach(cat => {
-                select.innerHTML += `<option value="${escapeHtml(cat)}" ${currentVal===cat?'selected':''}>📂 ${escapeHtml(cat)}</option>`;
+            const cv = select.value;
+            select.innerHTML = '<option value="">📂 万卷归宗</option>';
+            allCategories.forEach(c => {
+                select.innerHTML +=
+                    `<option value="${escHtml(c)}" ${cv===c?'selected':''}>📂 ${escHtml(c)}</option>`;
             });
-            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
+            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c =>
+                `<option value="${escHtml(c)}">`).join('');
         }
 
         function renderQuestions() {
-            const keyword = document.getElementById('searchKeyword').value.trim().toLowerCase();
-            const category = document.getElementById('filterCategory').value;
-
-            let filtered = allQuestions;
-            if (keyword) {
-                filtered = filtered.filter(q =>
-                    (q.number && q.number.toLowerCase().includes(keyword)) ||
-                    (q.name && q.name.toLowerCase().includes(keyword)) ||
-                    (q.content && q.content.toLowerCase().includes(keyword)) ||
-                    (q.code && q.code.toLowerCase().includes(keyword)) ||
-                    (q.category && q.category.toLowerCase().includes(keyword))
-                );
-            }
-            if (category) filtered = filtered.filter(q => q.category === category);
-
-            filtered.sort((a, b) => {
-                if (a.number && b.number) return a.number.localeCompare(b.number);
-                return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-            });
-
-            document.getElementById('resultCount').textContent = `共 ${filtered.length} 道题目`;
+            const kw = document.getElementById('searchKeyword').value.trim().toLowerCase();
+            const cat = document.getElementById('filterCategory').value;
+            let f = allQuestions;
+            if (kw) f = f.filter(q => (q.number || '').toLowerCase().includes(kw) || (q.name || '').toLowerCase()
+                .includes(kw) || (q.content || '').toLowerCase().includes(kw) || (q.code || '').toLowerCase()
+                .includes(kw) || (q.category || '').toLowerCase().includes(kw));
+            if (cat) f = f.filter(q => q.category === cat);
+            f.sort((a, b) => (a.number && b.number) ? a.number.localeCompare(b.number) : new Date(b.createdAt || 0) -
+                new Date(a.createdAt || 0));
+            document.getElementById('resultCount').textContent = `共 ${f.length} 卷`;
             const grid = document.getElementById('questionsGrid');
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="empty-state">
-                    <div class="icon">📭</div>
-                    <p>${allQuestions.length===0 ? '还没有题目，点击上方按钮添加吧！' : '没有匹配的题目'}</p>
-                </div>`;
+            if (f.length === 0) {
+                grid.innerHTML =
+                    `<div class="empty-state"><div class="icon">📭</div><p>${allQuestions.length===0?'尚无题卷，请掌门录入':'无匹配之卷'}</p></div>`;
                 return;
             }
-
             const isAdmin = currentUser && currentUser.role === 'admin';
-
-            grid.innerHTML = filtered.map(q => {
-                const imagesHtml = (q.images && q.images.length > 0) ?
-                    `<div class="q-images">${q.images.map(img=>`<img src="${escapeHtml(img)}" alt="题目图片" onclick="openLightbox('${escapeHtml(img)}')" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
-                const codeHtml = q.code ?
-                    `<div class="code-label">💻 正确代码</div>
-                    <div class="q-code" style="position:relative;">
-                        <button class="copy-btn" onclick="copyCode(event, '${escapeJs(q.code)}')">📋 复制</button>
-                        ${escapeHtml(q.code)}
-                    </div>` : '';
-                const contentHtml = q.content ? `<div class="q-content">${escapeHtml(q.content)}</div>` : '';
-                const actionsHtml = isAdmin ? `
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-sm" onclick="openEditModal('${q.id}')">✏️ 编辑</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">🗑 删除</button>
-                    </div>` : '';
-
+            grid.innerHTML = f.map(q => {
+                const imgs = (q.images && q.images.length) ? `<div class="q-images">${q.images.map(i=>`<img src="${escHtml(i)}" onclick="openLightbox('${escHtml(i)}')" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>` : '';
+                const codeHtml = q.code ? `<div class="code-label">💻 真经</div><div class="q-code" style="position:relative;"><button class="copy-btn" onclick="copyCode(event,'${escJs(q.code)}')">📋 抄录</button>${escHtml(q.code)}</div>` : '';
+                const cont = q.content ? `<div class="q-content">${escHtml(q.content)}</div>` : '';
+                const acts = isAdmin ? `<div class="card-actions"><button class="btn btn-outline btn-sm" onclick="openEditModal('${q.id}')">✏️ 修缮</button><button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">🗑 焚毁</button></div>` : '';
                 return `<div class="question-card" data-id="${q.id}">
-                    <div class="card-header">
-                        ${q.number ? `<span class="q-number">#${escapeHtml(q.number)}</span>` : ''}
-                        ${q.category ? `<span class="q-category">📂 ${escapeHtml(q.category)}</span>` : ''}
-                    </div>
-                    <div class="q-name">${escapeHtml(q.name || '未命名题目')}</div>
-                    ${contentHtml}
-                    ${imagesHtml}
-                    ${codeHtml}
-                    ${actionsHtml}
-                </div>`;
+              <div class="card-header">${q.number?`<span class="q-number">#${escHtml(q.number)}</span>`:''}${q.category?`<span class="q-category">📂 ${escHtml(q.category)}</span>`:''}</div>
+              <div class="q-name">${escHtml(q.name||'无名之题')}</div>${cont}${imgs}${codeHtml}${acts}</div>`;
             }).join('');
         }
 
         function openAddModal() {
-            if (currentUser.role !== 'admin') { showToast('仅管理员可添加题目', 'error'); return; }
-            document.getElementById('modalTitle').textContent = '➕ 添加题目';
+            if (currentUser.role !== 'admin') { showToast('仅掌门可录入', 'error'); return; }
+            document.getElementById('modalTitle').textContent = '📜 录入新题';
             document.getElementById('editId').value = '';
-            document.getElementById('qNumber').value = '';
-            document.getElementById('qName').value = '';
-            document.getElementById('qCategory').value = '';
-            document.getElementById('qContent').value = '';
-            document.getElementById('qCode').value = '';
-            document.getElementById('imageUrlInput').value = '';
+            ['qNumber', 'qName', 'qCategory', 'qContent', 'qCode', 'imageUrlInput'].forEach(id => document.getElementById(
+                id).value = '');
             document.getElementById('imageFileInput').value = '';
             tempImages = [];
             renderImagePreviews();
@@ -934,13 +1325,14 @@
             document.getElementById('questionModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
             document.getElementById('qNumber').focus();
-            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
+            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c =>
+                `<option value="${escHtml(c)}">`).join('');
         }
 
         function openEditModal(id) {
             const q = allQuestions.find(q => q.id === id);
             if (!q) { showToast('题目不存在', 'error'); return; }
-            document.getElementById('modalTitle').textContent = '✏️ 编辑题目';
+            document.getElementById('modalTitle').textContent = '✏️ 修缮题目';
             document.getElementById('editId').value = q.id;
             document.getElementById('qNumber').value = q.number || '';
             document.getElementById('qName').value = q.name || '';
@@ -954,7 +1346,8 @@
             updateCharCounts();
             document.getElementById('questionModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
-            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c => `<option value="${escapeHtml(c)}">`).join('');
+            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c =>
+                `<option value="${escHtml(c)}">`).join('');
         }
 
         function closeModal() {
@@ -967,176 +1360,128 @@
             const editId = document.getElementById('editId').value;
             const number = document.getElementById('qNumber').value.trim();
             const name = document.getElementById('qName').value.trim();
-            const category = document.getElementById('qCategory').value.trim();
-            const content = document.getElementById('qContent').value.trim();
-            const code = document.getElementById('qCode').value.trim();
-
-            if (!number) { showToast('请输入题目编号', 'error'); return; }
-            if (!name) { showToast('请输入题目名称', 'error'); return; }
-
-            const questionData = { number, name, category, content, code, images: [...tempImages] };
+            if (!number) { showToast('请输入题号', 'error'); return; }
+            if (!name) { showToast('请输入题名', 'error'); return; }
+            const qd = { number, name, category: document.getElementById('qCategory').value.trim(), content: document
+                    .getElementById('qContent').value.trim(), code: document.getElementById('qCode').value.trim(),
+                images: [...tempImages] };
             const btnSave = document.getElementById('btnSave');
-            btnSave.textContent = '保存中...';
+            btnSave.textContent = '收录中…';
             btnSave.disabled = true;
-
             try {
-                let res;
-                if (editId) {
-                    res = await fetch(`${API_BASE_URL}/api/questions/${encodeURIComponent(editId)}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify(questionData),
-                    });
-                } else {
-                    res = await fetch(`${API_BASE_URL}/api/questions`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify(questionData),
-                    });
-                }
+                const url = editId ? `${API_BASE_URL}/api/questions/${encodeURIComponent(editId)}` :
+                    `${API_BASE_URL}/api/questions`;
+                const method = editId ? 'PUT' : 'POST';
+                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', body: JSON.stringify(qd) });
                 if (res.status === 401) { handleLogout(); return; }
                 const data = await res.json();
-                if (res.ok && (data.success || data.question)) {
-                    closeModal();
+                if (res.ok && (data.success || data.question)) { closeModal();
                     await loadQuestions();
-                    showToast(editId ? '题目已更新 ✅' : '题目已添加 ✅', 'success');
-                } else {
-                    showToast(data.error || '保存失败', 'error');
-                }
-            } catch (err) {
-                showToast('保存失败，请检查网络', 'error');
-            } finally {
-                btnSave.textContent = '💾 保存';
-                btnSave.disabled = false;
-            }
+                    showToast(editId ? '题目已修缮 ✅' : '新题已收录 ✅', 'success'); } else { showToast(data.error ||
+                        '保存失败', 'error'); }
+            } catch (err) { showToast('保存失败', 'error'); } finally { btnSave.textContent = '💾 收录入库';
+                btnSave.disabled = false; }
         }
 
         async function deleteQuestion(id) {
-            if (!confirm('确定要删除这道题目吗？此操作不可恢复！')) return;
+            if (!confirm('确定焚毁此题？不可恢复！')) return;
             try {
-                const res = await fetch(`${API_BASE_URL}/api/questions/${encodeURIComponent(id)}`, {
-                    method: 'DELETE',
-                    credentials: 'include',
-                });
+                const res = await fetch(`${API_BASE_URL}/api/questions/${encodeURIComponent(id)}`, { method: 'DELETE',
+                    credentials: 'include' });
                 if (res.status === 401) { handleLogout(); return; }
                 const data = await res.json();
-                if (res.ok && data.success) {
-                    await loadQuestions();
-                    showToast('题目已删除 🗑', 'info');
-                } else {
-                    showToast(data.error || '删除失败', 'error');
-                }
-            } catch (err) {
-                showToast('删除失败，请检查网络', 'error');
-            }
+                if (res.ok && data.success) { await loadQuestions();
+                    showToast('题卷已焚毁 🗑', 'info'); } else { showToast(data.error || '删除失败', 'error'); }
+            } catch (err) { showToast('删除失败', 'error'); }
         }
 
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-            Array.from(files).forEach(file => {
-                if (!file.type.startsWith('image/')) { showToast(`${file.name} 不是图片`, 'error'); return; }
-                if (file.size > 10*1024*1024) { showToast(`${file.name} 超过10MB`, 'error'); return; }
-                compressAndAddImage(file);
-            });
-            event.target.value = '';
-        }
-
-        function compressAndAddImage(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let w = img.width, h = img.height;
-                    const maxW = 800;
-                    if (w > maxW) { h = Math.round(h * (maxW/w)); w = maxW; }
-                    canvas.width = w; canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    tempImages.push(canvas.toDataURL('image/jpeg', 0.7));
-                    renderImagePreviews();
+        function handleImageUpload(e) {
+            const files = e.target.files;
+            if (!files || !files.length) return;
+            Array.from(files).forEach(f => {
+                if (!f.type.startsWith('image/')) { showToast(`${f.name} 非图卷`, 'error'); return; }
+                if (f.size > 10 * 1024 * 1024) { showToast(`${f.name} 过大`, 'error'); return; }
+                const r = new FileReader();
+                r.onload = function(ev) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const cv = document.createElement('canvas');
+                        let w = img.width,
+                            h = img.height;
+                        if (w > 800) { h = Math.round(h * (800 / w));
+                            w = 800; }
+                        cv.width = w;
+                        cv.height = h;
+                        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+                        tempImages.push(cv.toDataURL('image/jpeg', 0.7));
+                        renderImagePreviews();
+                    };
+                    img.src = ev.target.result;
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                r.readAsDataURL(f);
+            });
+            e.target.value = '';
         }
 
         function addImageUrl() {
             const url = document.getElementById('imageUrlInput').value.trim();
             if (!url) return;
-            if (!url.match(/^https?:\/\//i) && !url.match(/^data:image\//)) {
-                showToast('请输入有效的图片URL', 'error'); return;
-            }
+            if (!url.match(/^https?:\/\//i) && !url.match(/^data:image\//)) { showToast('无效URL', 'error'); return; }
             tempImages.push(url);
             document.getElementById('imageUrlInput').value = '';
             renderImagePreviews();
         }
 
-        function removeTempImage(index) {
-            tempImages.splice(index, 1);
-            renderImagePreviews();
-        }
+        function removeTempImage(i) { tempImages.splice(i, 1);
+            renderImagePreviews(); }
 
         function renderImagePreviews() {
             const area = document.getElementById('imagePreviewArea');
-            if (tempImages.length === 0) {
-                area.innerHTML = '<span style="font-size:12px;color:#999;">暂无图片</span>';
-                return;
-            }
+            if (!tempImages.length) { area.innerHTML = '<span style="font-size:12px;color:#8a8068;">暂无图卷</span>'; return; }
             area.innerHTML = tempImages.map((img, i) => `
-                <div class="preview-item">
-                    <img src="${escapeHtml(img)}" alt="预览" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23eee%22 width=%22100%22 height=%22100%22/><text x=%2230%22 y=%2255%22 font-size=%2212%22 fill=%22%23999%22>错误</text></svg>'">
-                    <button class="remove-img" onclick="removeTempImage(${i})">×</button>
-                </div>
-            `).join('');
+            <div class="preview-item"><img src="${escHtml(img)}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23111%22 width=%22100%22 height=%22100%22/><text x=%2225%22 y=%2255%22 font-size=%2212%22 fill=%22%23888%22>破损</text></svg>'"><button class="remove-img" onclick="removeTempImage(${i})">×</button></div>
+          `).join('');
         }
 
-        function openLightbox(src) {
-            document.getElementById('lightboxImg').src = src;
+        function openLightbox(s) { document.getElementById('lightboxImg').src = s;
             document.getElementById('lightbox').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-            document.body.style.overflow = '';
-        }
-        function copyCode(event, code) {
-            event.stopPropagation();
+            document.body.style.overflow = 'hidden'; }
+
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = ''; }
+
+        function copyCode(e, code) {
+            e.stopPropagation();
             navigator.clipboard.writeText(code).then(() => {
-                const btn = event.target;
-                btn.textContent = '✅ 已复制';
-                setTimeout(() => { btn.textContent = '📋 复制'; }, 1500);
-            }).catch(() => showToast('复制失败', 'error'));
+                const b = e.target;
+                b.textContent = '✅ 已抄录';
+                setTimeout(() => b.textContent = '📋 抄录', 1500);
+            }).catch(() => showToast('抄录失败', 'error'));
         }
 
         function updateCharCounts() {
-            document.getElementById('contentCharCount').textContent = document.getElementById('qContent').value.length + ' 字';
+            document.getElementById('contentCharCount').textContent = document.getElementById('qContent').value.length +
+                ' 字';
             document.getElementById('codeCharCount').textContent = document.getElementById('qCode').value.length + ' 字';
         }
-        document.getElementById('qContent').addEventListener('input', updateCharCounts);
-        document.getElementById('qCode').addEventListener('input', updateCharCounts);
 
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
+        function showToast(msg, type = 'info') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.textContent = msg;
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0';
+                t.style.transition = 'opacity 0.3s';
+                setTimeout(() => t.remove(), 300); }, 2500);
         }
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-        function escapeJs(str) {
-            if (!str) return '';
-            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
-        }
+        function escHtml(s) { if (!s) return ''; const d = document.createElement('div');
+            d.textContent = s; return d.innerHTML; }
+
+        function escJs(s) { if (!s) return ''; return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"')
+                .replace(/\n/g, '\\n').replace(/\r/g, '\\r'); }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
