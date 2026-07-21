@@ -1,26 +1,21 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📚 墨韵题库 · 古风科技</title>
 
-    <!-- Markdown 渲染核心库 -->
-    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js">
-    </script>
+    <!-- Markdown 解析 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <!-- 代码高亮 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="hljs-style">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <!-- KaTeX 数学公式 -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.css">
-    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.js">
-    </script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js">
-    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <!-- Mermaid 图表 -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 
     <style>
         :root {
@@ -48,19 +43,9 @@
             --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        #particleCanvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.7;
-        }
+        #particleCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.7; }
 
         body {
             font-family: var(--font-cn);
@@ -73,531 +58,161 @@
             position: relative;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
+            content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
             background: radial-gradient(ellipse at 15% 85%, rgba(90, 143, 123, 0.08) 0%, transparent 55%),
                 radial-gradient(ellipse at 85% 15%, rgba(212, 168, 83, 0.06) 0%, transparent 55%),
                 radial-gradient(ellipse at 50% 50%, rgba(77, 166, 255, 0.04) 0%, transparent 70%),
                 radial-gradient(ellipse at 25% 25%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
         }
         .mountains-bg {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 35vh;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.25;
-            background: linear-gradient(175deg, transparent 40%, rgba(30, 28, 40, 0.9) 70%, rgba(20, 18, 28, 0.95) 100%);
-        }
-        .mountains-bg::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 5%;
-            width: 90%;
-            height: 60%;
-            background: radial-gradient(ellipse at 20% 80%, rgba(90, 143, 123, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 65% 70%, rgba(60, 80, 100, 0.25) 0%, transparent 45%),
-                radial-gradient(ellipse at 80% 85%, rgba(40, 50, 60, 0.2) 0%, transparent 40%);
-            border-radius: 50% 50% 0 0;
-            filter: blur(15px);
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 35vh; z-index: 0; pointer-events: none; opacity: 0.25;
+            background: linear-gradient(175deg, transparent 40%, rgba(30,28,40,0.9) 70%, rgba(20,18,28,0.95) 100%);
         }
 
-        /* 登录界面 */
+        /* 登录覆盖层 */
         .login-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(6, 6, 14, 0.92);
-            transition: opacity 0.6s, visibility 0.6s;
+            position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
+            background: rgba(6,6,14,0.92); transition: opacity 0.6s, visibility 0.6s;
         }
-        .login-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        .login-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .login-card {
-            background: var(--bg-card);
-            border: 1.5px solid var(--border-gold);
-            border-radius: var(--radius-lg);
-            padding: 48px 40px;
-            width: 440px;
-            max-width: 92vw;
-            text-align: center;
-            box-shadow: var(--shadow-gold), inset 0 0 60px rgba(212, 168, 83, 0.04);
-            backdrop-filter: blur(20px);
-            animation: cardGlow 3s ease-in-out infinite;
+            background: var(--bg-card); border: 1.5px solid var(--border-gold); border-radius: var(--radius-lg);
+            padding: 48px 40px; width: 440px; max-width: 92vw; text-align: center;
+            box-shadow: var(--shadow-gold); backdrop-filter: blur(20px); animation: cardGlow 3s infinite;
         }
         @keyframes cardGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 20px rgba(212, 168, 83, 0.3), 0 0 50px rgba(212, 168, 83, 0.08);
-            }
-            50% {
-                box-shadow: 0 0 35px rgba(240, 208, 120, 0.4), 0 0 70px rgba(212, 168, 83, 0.15);
-            }
+            0%,100% { box-shadow: 0 0 20px rgba(212,168,83,0.3), 0 0 50px rgba(212,168,83,0.08); }
+            50% { box-shadow: 0 0 35px rgba(240,208,120,0.4), 0 0 70px rgba(212,168,83,0.15); }
         }
-        .login-card .seal-icon {
-            font-size: 56px;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 0 12px rgba(212, 168, 83, 0.6));
-            animation: sealFloat 2s ease-in-out infinite;
-        }
-        @keyframes sealFloat {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-        .login-card h1 {
-            font-size: 26px;
-            color: var(--gold-light);
-            letter-spacing: 4px;
-            margin-bottom: 4px;
-            text-shadow: 0 0 30px rgba(240, 208, 120, 0.5);
-        }
-        .login-card .subtitle {
-            font-size: 13px;
-            color: var(--text-dim);
-            margin-bottom: 28px;
-            letter-spacing: 2px;
-        }
-        .login-card .input-group {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-        .login-card label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 7px;
-            color: var(--ink-light);
-            letter-spacing: 1px;
-        }
+        .login-card .seal-icon { font-size: 56px; filter: drop-shadow(0 0 12px rgba(212,168,83,0.6)); animation: sealFloat 2s infinite; }
+        @keyframes sealFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .login-card h1 { font-size: 26px; color: var(--gold-light); letter-spacing: 4px; margin-bottom: 4px; }
+        .login-card .subtitle { font-size: 13px; color: var(--text-dim); margin-bottom: 28px; letter-spacing: 2px; }
+        .login-card .input-group { margin-bottom: 16px; text-align: left; }
+        .login-card label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; color: var(--ink-light); }
         .login-card input {
-            width: 100%;
-            padding: 13px 16px;
-            border: 1.5px solid var(--border-gold);
-            border-radius: var(--radius);
-            font-size: 15px;
-            background: rgba(10, 10, 20, 0.6);
-            color: var(--ink-light);
-            font-family: inherit;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            backdrop-filter: blur(5px);
+            width: 100%; padding: 13px 16px; border: 1.5px solid var(--border-gold); border-radius: var(--radius);
+            background: rgba(10,10,20,0.6); color: var(--ink-light); font-family: inherit; transition: var(--transition);
         }
-        .login-card input:focus {
-            outline: none;
-            border-color: var(--gold-light);
-            box-shadow: 0 0 18px rgba(240, 208, 120, 0.35), inset 0 0 10px rgba(212, 168, 83, 0.08);
-        }
+        .login-card input:focus { outline: none; border-color: var(--gold-light); box-shadow: 0 0 18px rgba(240,208,120,0.35); }
         .login-card .btn-login {
-            width: 100%;
-            padding: 13px;
-            background: linear-gradient(135deg, #8b6914 0%, #b8942e 40%, #d4a853 70%, #8b6914 100%);
-            color: #1a1608;
-            border: 1px solid rgba(240, 208, 120, 0.5);
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            letter-spacing: 3px;
-            transition: var(--transition);
+            width: 100%; padding: 13px; background: linear-gradient(135deg, #8b6914, #b8942e 40%, #d4a853 70%, #8b6914);
+            color: #1a1608; border: 1px solid rgba(240,208,120,0.5); border-radius: var(--radius);
+            font-size: 16px; font-weight: 700; cursor: pointer; letter-spacing: 3px; transition: var(--transition);
         }
-        .login-card .btn-login:hover {
-            background: linear-gradient(135deg, #a07d1a 0%, #d4a853 40%, #f0d078 70%, #a07d1a 100%);
-            box-shadow: 0 0 35px rgba(240, 208, 120, 0.55);
-            transform: translateY(-2px);
-        }
-        .login-card .error-msg {
-            color: #e85d4a;
-            font-size: 13px;
-            margin-top: 12px;
-            min-height: 20px;
-        }
+        .login-card .btn-login:hover { box-shadow: 0 0 35px rgba(240,208,120,0.55); transform: translateY(-2px); }
+        .login-card .error-msg { color: #e85d4a; font-size: 13px; margin-top: 12px; min-height: 20px; }
 
         /* 主应用 */
-        .app-container {
-            display: none;
-            max-width: 1340px;
-            margin: 0 auto;
-            padding: 24px 28px;
-            position: relative;
-            z-index: 2;
-        }
-        .app-container.active {
-            display: block;
-            animation: fadeUpIn 0.5s ease-out;
-        }
-        @keyframes fadeUpIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .app-container { display: none; max-width: 1340px; margin: 0 auto; padding: 24px 28px; position: relative; z-index: 2; }
+        .app-container.active { display: block; animation: fadeUpIn 0.5s ease-out; }
+        @keyframes fadeUpIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .app-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 26px;
-            background: var(--bg-card);
-            padding: 18px 28px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-gold);
-            box-shadow: var(--shadow-gold);
-            backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+            margin-bottom: 26px; background: var(--bg-card); padding: 18px 28px; border-radius: var(--radius-lg);
+            border: 1px solid var(--border-gold); box-shadow: var(--shadow-gold); backdrop-filter: blur(15px);
         }
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            letter-spacing: 1.5px;
-            font-family: inherit;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            white-space: nowrap;
+            padding: 10px 20px; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600;
+            cursor: pointer; letter-spacing: 1.5px; font-family: inherit; transition: var(--transition);
+            display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #5a3e0e 0%, #8b6914 50%, #5a3e0e 100%);
-            color: #f0d078;
-            border: 1px solid rgba(240, 208, 120, 0.5);
-        }
-        .btn-outline {
-            background: transparent;
-            color: var(--gold-light);
-            border: 1.5px solid var(--border-gold);
-        }
-        .btn-danger {
-            background: transparent;
-            color: #e85d4a;
-            border: 1.5px solid rgba(200, 60, 40, 0.5);
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 12px;
-        }
+        .btn-primary { background: linear-gradient(135deg, #5a3e0e, #8b6914 50%, #5a3e0e); color: #f0d078; border: 1px solid rgba(240,208,120,0.5); }
+        .btn-outline { background: transparent; color: var(--gold-light); border: 1.5px solid var(--border-gold); }
+        .btn-danger { background: transparent; color: #e85d4a; border: 1.5px solid rgba(200,60,40,0.5); }
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
 
-        .search-bar {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 22px;
-            align-items: center;
+        .search-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; align-items: center; }
+        .search-bar input, .search-bar select {
+            padding: 11px 16px; border: 1.5px solid var(--border-gold); border-radius: var(--radius);
+            font-size: 14px; background: rgba(16,14,26,0.7); color: var(--ink-light); font-family: inherit;
+            transition: var(--transition); backdrop-filter: blur(8px);
         }
-        .search-bar input,
-        .search-bar select {
-            padding: 11px 16px;
-            border: 1.5px solid var(--border-gold);
-            border-radius: var(--radius);
-            font-size: 14px;
-            background: rgba(16, 14, 26, 0.7);
-            color: var(--ink-light);
-            font-family: inherit;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            backdrop-filter: blur(8px);
-        }
-        .search-bar input {
-            flex: 1;
-            min-width: 200px;
-        }
+        .search-bar input:focus, .search-bar select:focus { outline: none; border-color: var(--gold-light); }
+        .search-bar input { flex: 1; min-width: 200px; }
 
         .questions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-            gap: 18px;
-            margin-bottom: 24px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 18px; margin-bottom: 24px;
         }
-        @media (max-width: 500px) {
-            .questions-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 500px) { .questions-grid { grid-template-columns: 1fr; } }
+
+        /* 题目卡片 */
         .question-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 22px 20px;
-            transition: var(--transition);
-            border: 1px solid var(--border-gold);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(12px);
+            background: var(--bg-card); border-radius: var(--radius-lg); padding: 22px 20px;
+            transition: var(--transition); border: 1px solid var(--border-gold); position: relative;
+            display: flex; flex-direction: column; gap: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(12px); cursor: pointer; overflow: hidden;
         }
         .question-card:hover {
-            border-color: rgba(240, 208, 120, 0.6);
-            box-shadow: 0 0 30px rgba(240, 208, 120, 0.2);
+            border-color: rgba(240,208,120,0.6); box-shadow: 0 0 30px rgba(240,208,120,0.2);
             transform: translateY(-3px);
         }
+        .question-card:active { transform: scale(0.98); }
+        .question-card .card-header { display: flex; gap: 8px; align-items: center; }
         .question-card .q-number {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--gold-light);
-            background: rgba(212, 168, 83, 0.12);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(212, 168, 83, 0.3);
+            font-family: var(--font-mono); font-size: 12px; color: var(--gold-light);
+            background: rgba(212,168,83,0.12); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(212,168,83,0.3);
         }
         .question-card .q-category {
-            font-size: 11px;
-            background: rgba(90, 143, 123, 0.15);
-            color: var(--jade-light);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(90, 143, 123, 0.3);
+            font-size: 11px; background: rgba(90,143,123,0.15); color: var(--jade-light);
+            padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(90,143,123,0.3);
         }
-        .question-card .q-name {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--ink-light);
+        .question-card .q-name { font-size: 17px; font-weight: 700; color: var(--ink-light); letter-spacing: 1px; }
+        .md-preview {
+            font-size: 13px; color: var(--text); max-height: 140px; overflow-y: auto; padding: 8px 0;
+            border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);
+            line-height: 1.6; opacity: 0.9;
+        }
+        .code-block-mini {
+            font-family: var(--font-mono); font-size: 11px; background: #0a0c15; color: #c9d1d9;
+            padding: 10px 14px; border-radius: 4px; border: 1px solid rgba(77,166,255,0.25);
+            max-height: 80px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+            position: relative;
+        }
+        .copy-mini {
+            position: absolute; top: 4px; right: 8px; background: rgba(77,166,255,0.2); color: #8cc8ff;
+            border: none; padding: 2px 10px; border-radius: 3px; font-size: 10px; cursor: pointer;
+            opacity: 0; transition: 0.3s;
+        }
+        .question-card:hover .copy-mini { opacity: 1; }
+        .card-actions { display: flex; gap: 8px; justify-content: flex-end; padding-top: 6px; }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(10,10,20,0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(212,168,83,0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(212,168,83,0.7); }
+
+        /* 详情查看模态框 */
+        .detail-modal-overlay {
+            position: fixed; inset: 0; background: rgba(4,4,12,0.85); z-index: 1000; display: flex;
+            align-items: center; justify-content: center; animation: fadeIn 0.2s; backdrop-filter: blur(4px);
+        }
+        .detail-modal {
+            background: var(--bg-card); border: 1.5px solid var(--border-gold); border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-gold); width: 750px; max-width: 95vw; max-height: 85vh; overflow-y: auto;
+            padding: 32px 28px; animation: slideUp 0.3s; color: var(--text);
+        }
+        .detail-modal h2 { color: var(--gold-light); margin-bottom: 18px; }
+        .detail-content { margin: 16px 0; line-height: 1.8; }
+        .detail-code { margin-top: 20px; }
+        .detail-code pre {
+            background: #0a0c15; padding: 16px; border-radius: 6px; border: 1px solid rgba(77,166,255,0.3);
+            overflow-x: auto; color: #c9d1d9; font-family: var(--font-mono); font-size: 13px;
         }
 
-        /* Markdown 渲染内容样式 */
-        .md-content {
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--text);
-            max-height: 300px;
-            overflow-y: auto;
-            background: rgba(10, 10, 20, 0.4);
-            padding: 12px 14px;
-            border-radius: 4px;
-            border-left: 2px solid rgba(212, 168, 83, 0.4);
-        }
-        .md-content h1,
-        .md-content h2,
-        .md-content h3 {
-            color: var(--gold-light);
-            border-bottom: 1px solid var(--border-gold);
-            padding-bottom: 0.2em;
-            margin: 0.8em 0 0.4em;
-        }
-        .md-content p {
-            margin: 0.6em 0;
-            color: var(--text);
-        }
-        .md-content code {
-            font-family: var(--font-mono);
-            background: rgba(77, 166, 255, 0.15);
-            padding: 2px 6px;
-            border-radius: 3px;
-            color: #8cc8ff;
-        }
-        .md-content pre {
-            background: #0a0c15;
-            border: 1px solid rgba(77, 166, 255, 0.3);
-            border-radius: 6px;
-            padding: 12px;
-            overflow-x: auto;
-        }
-        .md-content blockquote {
-            border-left: 3px solid var(--gold);
-            padding: 4px 12px;
-            color: var(--text-dim);
-            background: rgba(212, 168, 83, 0.06);
-            border-radius: 0 4px 4px 0;
-        }
-        .md-content table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 0.8em 0;
-        }
-        .md-content th,
-        .md-content td {
-            border: 1px solid var(--border-gold);
-            padding: 6px 12px;
-            text-align: left;
-        }
-        .md-content th {
-            background: rgba(212, 168, 83, 0.1);
-            color: var(--gold-light);
-        }
-
-        /* 模态框 */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(4, 4, 12, 0.85);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.25s;
-            backdrop-filter: blur(3px);
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        .modal {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1.5px solid var(--border-gold);
-            box-shadow: var(--shadow-gold);
-            width: 760px;
-            max-width: 95vw;
-            max-height: 88vh;
-            overflow-y: auto;
-            padding: 30px 26px;
-            animation: slideUp 0.3s;
-            backdrop-filter: blur(20px);
-        }
-        @keyframes slideUp {
-            from {
-                transform: translateY(40px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        .modal h2 {
-            color: var(--gold-light);
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-        }
-        .modal .form-group {
-            margin-bottom: 16px;
-        }
-        .modal label {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--ink-light);
-            letter-spacing: 1px;
-        }
-        .modal input[type="text"],
-        .modal textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1.5px solid var(--border-gold);
-            border-radius: var(--radius);
-            background: rgba(10, 10, 20, 0.6);
-            color: var(--ink-light);
-            font-family: inherit;
-            transition: var(--transition);
-        }
-        .modal textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        .modal .editor-tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-        .modal .editor-tabs button {
-            background: transparent;
-            border: 1px solid var(--border-gold);
-            color: var(--text-dim);
-            padding: 4px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: var(--transition);
-        }
-        .modal .editor-tabs button.active {
-            background: rgba(212, 168, 83, 0.15);
-            color: var(--gold-light);
-            border-color: var(--gold-light);
-        }
-        .preview-box {
-            min-height: 120px;
-            max-height: 250px;
-            overflow-y: auto;
-            background: rgba(10, 10, 20, 0.5);
-            border: 1px solid var(--border-gold);
-            border-radius: 4px;
-            padding: 12px;
-            color: var(--text);
-        }
         .toast {
-            position: fixed;
-            top: 22px;
-            right: 22px;
-            z-index: 9999;
-            padding: 13px 22px;
-            border-radius: var(--radius);
-            color: #fff;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            animation: slideIn 0.35s;
-            pointer-events: none;
+            position: fixed; top: 22px; right: 22px; z-index: 9999; padding: 13px 22px; border-radius: var(--radius);
+            color: #fff; font-weight: 600; letter-spacing: 1.5px; animation: slideIn 0.35s;
+            pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
         }
-        @keyframes slideIn {
-            from {
-                transform: translateX(130%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        .toast.success {
-            background: #2d5a3d;
-        }
-        .toast.error {
-            background: #5a2d2d;
-        }
+        @keyframes slideIn { from { transform: translateX(130%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.success { background: #2d5a3d; } .toast.error { background: #5a2d2d; }
 
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(2, 2, 10, 0.92);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .lightbox img {
-            max-width: 90vw;
-            max-height: 90vh;
-            border-radius: 6px;
-            border: 2px solid rgba(212, 168, 83, 0.5);
-        }
+        .lightbox { position: fixed; inset: 0; background: rgba(2,2,10,0.92); z-index: 10000; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 6px; border: 2px solid rgba(212,168,83,0.5); }
 
-        @media (max-width: 768px) {
-            .app-header {
-                flex-direction: column;
-            }
-            .search-bar {
-                flex-direction: column;
-            }
-            .questions-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 768px) { .app-header { flex-direction: column; } .search-bar { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -607,76 +222,95 @@
 
     <!-- 登录 -->
     <div class="login-overlay" id="loginOverlay">
-        <div class="login-card" id="loginCard">
+        <div class="login-card">
             <div class="seal-icon">🏮</div>
             <h1>墨 韵 题 库</h1>
             <p class="subtitle">· 古风雅韵 · 科技之光 ·</p>
-            <div class="input-group"><label>👤 道号</label><input type="text" id="loginUsername" placeholder="请输入账号" autocomplete="username"></div>
-            <div class="input-group"><label>🔑 秘钥</label><input type="password" id="loginPassword" placeholder="请输入密码" autocomplete="current-password"></div>
+            <div class="input-group"><label>👤 道号</label><input type="text" id="loginUsername" placeholder="请输入账号"></div>
+            <div class="input-group"><label>🔑 秘钥</label><input type="password" id="loginPassword" placeholder="请输入密码"></div>
             <button class="btn-login" id="btnLogin">开 启 卷 轴</button>
             <p class="error-msg" id="loginError"></p>
+            <p style="font-size:11px;color:#8a8068;margin-top:16px;">默认道号：zlm / 秘钥：zlm20130503</p>
         </div>
     </div>
 
     <!-- 主应用 -->
     <div class="app-container" id="appContainer">
         <div class="app-header">
-            <div class="header-left"><span class="logo">🏮</span><h1>墨韵题库</h1></div>
-            <div class="user-info">
+            <div><span class="logo" style="font-size:28px;">🏮</span> <strong style="color:var(--gold-light);font-size:20px;letter-spacing:3px;">墨韵题库</strong></div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                 <span>📜 <strong id="displayUsername"></strong></span>
-                <span class="badge" id="displayRole"></span>
-                <button class="btn btn-outline btn-sm" id="btnAddQuestion" onclick="openAddModal()">➕ 录入新题</button>
+                <span class="badge" id="displayRole" style="background:rgba(90,143,123,0.2);color:var(--jade-light);padding:4px 14px;border-radius:20px;border:1px solid rgba(90,143,123,0.4);"></span>
+                <button class="btn btn-outline btn-sm" id="btnAddQuestion" onclick="openEditor()">➕ 录入新题</button>
                 <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 归隐</button>
             </div>
         </div>
+
         <div class="search-bar">
-            <input type="text" id="searchKeyword" placeholder="🔍 搜题目、编号、内容、代码…" oninput="renderQuestions()">
+            <input type="text" id="searchKeyword" placeholder="🔍 搜题目、编号、内容…" oninput="renderQuestions()">
             <select id="filterCategory" onchange="renderQuestions()"><option value="">📂 万卷归宗</option></select>
-            <span class="result-count" id="resultCount"></span>
+            <span class="result-count" id="resultCount" style="color:var(--text-dim);"></span>
         </div>
+
         <div class="questions-grid" id="questionsGrid"></div>
     </div>
 
-    <!-- 添加/编辑模态框 -->
-    <div id="questionModal" style="display:none;">
-        <div class="modal-overlay" onclick="closeModal()">
-            <div class="modal" onclick="event.stopPropagation()">
-                <h2 id="modalTitle">📜 录入新题</h2>
+    <!-- 添加/编辑题目模态框 -->
+    <div id="editorModal" style="display:none;">
+        <div class="detail-modal-overlay" onclick="closeEditor()">
+            <div class="detail-modal" onclick="event.stopPropagation()" style="max-width:800px;">
+                <h2 id="editorTitle">📜 录入新题</h2>
                 <input type="hidden" id="editId">
-                <div class="form-group"><label>📌 题号 *</label><input type="text" id="qNumber" placeholder="LC001"></div>
-                <div class="form-group"><label>📝 题名 *</label><input type="text" id="qName" placeholder="题目名称"></div>
-                <div class="form-group"><label>📂 所属卷宗</label><input type="text" id="qCategory" placeholder="LeetCode" list="categorySuggestions"><datalist id="categorySuggestions"></datalist></div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:200px;"><label>📌 题号 *</label><input type="text" id="qNumber" style="width:100%;padding:10px;background:rgba(10,10,20,0.6);border:1px solid var(--border-gold);color:var(--ink-light);border-radius:4px;"></div>
+                    <div style="flex:2;min-width:250px;"><label>📝 题名 *</label><input type="text" id="qName" style="width:100%;padding:10px;background:rgba(10,10,20,0.6);border:1px solid var(--border-gold);color:var(--ink-light);border-radius:4px;"></div>
+                </div>
+                <div style="margin-top:12px;"><label>📂 所属卷宗</label><input type="text" id="qCategory" placeholder="LeetCode" list="categoryList" style="width:100%;padding:10px;background:rgba(10,10,20,0.6);border:1px solid var(--border-gold);color:var(--ink-light);border-radius:4px;"><datalist id="categoryList"></datalist></div>
 
-                <!-- Markdown 编辑器 -->
-                <div class="form-group">
+                <div style="margin-top:16px;">
                     <label>📄 题目内容 (Markdown)</label>
-                    <div class="editor-tabs">
-                        <button id="tabWrite" class="active" onclick="switchEditorTab('write')">✍️ 撰写</button>
-                        <button id="tabPreview" onclick="switchEditorTab('preview')">👁️ 预览</button>
+                    <div style="display:flex;gap:6px;margin-bottom:4px;">
+                        <button id="tabWrite" class="btn btn-outline btn-sm active" onclick="switchTab('write')">✍️ 撰写</button>
+                        <button id="tabPreview" class="btn btn-outline btn-sm" onclick="switchTab('preview')">👁️ 预览</button>
                     </div>
-                    <textarea id="qContentSrc" rows="8" placeholder="支持 Markdown、LaTeX 公式、Mermaid 图表…" oninput="updateCharCounts()"></textarea>
-                    <div id="qContentPreview" class="preview-box" style="display:none;"></div>
-                    <div class="char-count" id="contentCharCount">0 字</div>
+                    <textarea id="qContentSrc" rows="8" style="width:100%;padding:12px;background:rgba(10,10,20,0.6);border:1px solid var(--border-gold);color:var(--ink-light);font-family:var(--font-mono);border-radius:4px;" oninput="updateEditorStats()"></textarea>
+                    <div id="qContentPreview" style="display:none;min-height:100px;max-height:250px;overflow-y:auto;background:rgba(10,10,20,0.5);border:1px solid var(--border-gold);border-radius:4px;padding:12px;color:var(--text);"></div>
+                    <div style="font-size:11px;color:var(--text-dim);text-align:right;" id="contentCharCount">0 字</div>
                 </div>
 
-                <div class="form-group"><label>🖼️ 题目图卷（附件）</label>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                        <input type="file" id="imageFileInput" accept="image/*" multiple style="display:none;" onchange="handleImageUpload(event)">
-                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('imageFileInput').click()">📁 上传</button>
-                        <input type="text" id="imageUrlInput" placeholder="图片URL" style="flex:1;min-width:150px;">
-                        <button class="btn btn-primary btn-sm" onclick="addImageUrl()">添加</button>
+                <div style="margin-top:16px;"><label>🖼️ 图卷附件</label>
+                    <div style="display:flex;gap:8px;">
+                        <input type="file" id="imgFile" accept="image/*" multiple style="display:none;" onchange="uploadImages()">
+                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('imgFile').click()">📁 上传</button>
+                        <input type="text" id="imgUrl" placeholder="或粘贴图片URL" style="flex:1;padding:8px;background:rgba(10,10,20,0.6);border:1px solid var(--border-gold);color:var(--ink-light);border-radius:4px;">
+                        <button class="btn btn-primary btn-sm" onclick="addImgUrl()">添加</button>
                     </div>
-                    <div class="image-preview-area" id="imagePreviewArea" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;"></div>
+                    <div id="imgPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;"></div>
                 </div>
 
-                <div class="form-group"><label>💻 正确代码</label>
-                    <textarea id="qCode" rows="6" placeholder="输入代码…" oninput="updateCharCounts()"></textarea>
-                    <div class="char-count" id="codeCharCount">0 字</div>
+                <div style="margin-top:16px;">
+                    <label>💻 正确代码 (纯文本，不用Markdown)</label>
+                    <textarea id="qCode" rows="6" style="width:100%;padding:12px;background:#0a0c15;border:1px solid rgba(77,166,255,0.3);color:#c9d1d9;font-family:var(--font-mono);border-radius:4px;" oninput="updateEditorStats()"></textarea>
+                    <div style="font-size:11px;color:var(--text-dim);text-align:right;" id="codeCharCount">0 字</div>
                 </div>
 
-                <div class="modal-actions">
-                    <button class="btn btn-outline" onclick="closeModal()">取消</button>
+                <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+                    <button class="btn btn-outline" onclick="closeEditor()">取消</button>
                     <button class="btn btn-primary" id="btnSave" onclick="saveQuestion()">💾 收录入库</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看详情模态框 -->
+    <div id="detailModal" style="display:none;">
+        <div class="detail-modal-overlay" onclick="closeDetail()">
+            <div class="detail-modal" onclick="event.stopPropagation()">
+                <h2 id="detailTitle"></h2>
+                <div class="detail-content" id="detailContent"></div>
+                <div class="detail-code" id="detailCode"></div>
+                <div style="display:flex;justify-content:flex-end;margin-top:20px;">
+                    <button class="btn btn-outline" onclick="closeDetail()">关闭</button>
                 </div>
             </div>
         </div>
@@ -686,441 +320,267 @@
     <div id="toastContainer"></div>
 
     <script>
-        const API_BASE_URL = 'https://myzlm.serveousercontent.com';
-        let allQuestions = [],
-            allCategories = [],
-            currentUser = null,
-            tempImages = [];
-        let currentEditorTab = 'write';
+        const API = 'https://myzlm.serveousercontent.com';
+        let allQuestions = [], allCategories = [], currentUser = null, tempImages = [], currentTab = 'write';
 
-        // 粒子系统
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [],
-            mouseParticles = [];
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        class Particle {
-            constructor(x, y) {
-                this.x = x || Math.random() * canvas.width;
-                this.y = y || Math.random() * canvas.height;
-                this.size = Math.random() * 2.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.speedY = (Math.random() - 0.5) * 0.4;
-                this.opacity = Math.random() * 0.5 + 0.15;
-                this.fadeSpeed = Math.random() * 0.005 + 0.002;
-                this.hue = Math.random() < 0.6 ? 42 : 200;
-                this.glow = Math.random() < 0.3;
+        // 粒子系统 (同上)
+        const canvas = document.getElementById('particleCanvas'), ctx = canvas.getContext('2d');
+        let particles = [], mouseParticles = [];
+        function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        class P {
+            constructor(x,y) {
+                this.x = x??Math.random()*canvas.width; this.y = y??Math.random()*canvas.height;
+                this.size = Math.random()*2+0.5; this.vx = (Math.random()-0.5)*0.4; this.vy = (Math.random()-0.5)*0.4;
+                this.opacity = Math.random()*0.4+0.15; this.fade = Math.random()*0.004+0.001;
+                this.hue = Math.random()<0.6?42:200; this.glow = Math.random()<0.3;
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.opacity += (Math.random() - 0.5) * this.fadeSpeed;
-                this.opacity = Math.max(0.08, Math.min(0.6, this.opacity));
-                if (this.x < -10) this.x = canvas.width + 10;
-                if (this.x > canvas.width + 10) this.x = -10;
-                if (this.y < -10) this.y = canvas.height + 10;
-                if (this.y > canvas.height + 10) this.y = -10;
+            update(){
+                this.x+=this.vx; this.y+=this.vy; this.opacity+= (Math.random()-0.5)*this.fade;
+                this.opacity = Math.max(0.05, Math.min(0.6, this.opacity));
+                if(this.x<-10) this.x=canvas.width+10; if(this.x>canvas.width+10) this.x=-10;
+                if(this.y<-10) this.y=canvas.height+10; if(this.y>canvas.height+10) this.y=-10;
             }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${this.hue},60%,65%,${this.opacity})`;
-                if (this.glow) { ctx.shadowColor = `hsla(${this.hue},70%,60%,${this.opacity*0.8})`;
-                    ctx.shadowBlur = 6; } else ctx.shadowBlur = 0;
-                ctx.fill();
-                ctx.shadowBlur = 0;
+            draw(){
+                ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+                ctx.fillStyle=`hsla(${this.hue},60%,65%,${this.opacity})`;
+                if(this.glow){ctx.shadowColor=`hsla(${this.hue},70%,60%,${this.opacity*0.7})`; ctx.shadowBlur=6;}
+                else ctx.shadowBlur=0; ctx.fill(); ctx.shadowBlur=0;
             }
         }
-        class BurstParticle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 4 + 2;
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed;
-                this.life = 1;
-                this.decay = Math.random() * 0.03 + 0.015;
-                this.size = Math.random() * 3 + 1;
-                this.hue = 42;
-            }
-            update() { this.x += this.vx;
-                this.y += this.vy;
-                this.vy += 0.06;
-                this.life -= this.decay;
-                this.size *= 0.985; }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${this.hue},80%,60%,${this.life})`;
-                ctx.shadowColor = `hsla(${this.hue},90%,55%,${this.life*0.7})`;
-                ctx.shadowBlur = 10;
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
-            get dead() { return this.life <= 0; }
+        for(let i=0;i<80;i++) particles.push(new P());
+        function burst(x,y){ for(let i=0;i<18;i++) mouseParticles.push(new (class{constructor(x,y){this.x=x;this.y=y;let a=Math.random()*Math.PI*2,s=Math.random()*3+2;this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;this.life=1;this.decay=0.02;this.size=Math.random()*2+1;}update(){this.x+=this.vx;this.y+=this.vy;this.vy+=0.06;this.life-=this.decay;this.size*=0.98;}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`hsla(42,80%,60%,${this.life})`;ctx.shadowColor=`hsla(42,90%,55%,${this.life*0.6})`;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;}get dead(){return this.life<=0;}})(x,y)); }
+        document.addEventListener('click',e=>{ burst(e.clientX,e.clientY); });
+        function animate(){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p=>{p.update();p.draw();});
+            mouseParticles.forEach(p=>{p.update();p.draw();});
+            mouseParticles = mouseParticles.filter(p=>!p.dead);
+            requestAnimationFrame(animate);
         }
-        for (let i = 0; i < 80; i++) particles.push(new Particle());
-
-        function burstAt(x, y) { for (let i = 0; i < 20; i++) mouseParticles.push(new BurstParticle(x, y)); }
-        document.addEventListener('click', function(e) {
-            burstAt(e.clientX, e.clientY);
-            const dot = document.createElement('div');
-            dot.style.cssText = `position:fixed;left:${e.clientX-20}px;top:${e.clientY-20}px;width:40px;height:40px;border-radius:50%;pointer-events:none;z-index:99999;background:radial-gradient(circle,rgba(240,208,120,0.7) 0%,transparent 70%);animation:inkSpread 0.8s ease-out forwards;`;
-            document.body.appendChild(dot);
-            setTimeout(() => dot.remove(), 800);
-        });
-        const inkStyle = document.createElement('style');
-        inkStyle.textContent = '@keyframes inkSpread{0%{transform:scale(0.3);opacity:1}100%{transform:scale(3.5);opacity:0}}';
-        document.head.appendChild(inkStyle);
-
-        function resizeCanvas() { canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight; }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update();
-                p.draw(); });
-            mouseParticles.forEach(p => { p.update();
-                p.draw(); });
-            mouseParticles = mouseParticles.filter(p => !p.dead);
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // Mermaid 初始化
-        mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+        animate();
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', ()=>{
             checkAuth();
             document.getElementById('btnLogin').addEventListener('click', handleLogin);
-            document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter')
-                    handleLogin(); });
-            document.getElementById('loginUsername').addEventListener('keydown', e => { if (e.key === 'Enter')
-                    document.getElementById('loginPassword').focus(); });
-            document.getElementById('qContentSrc').addEventListener('input', updateCharCounts);
-            document.getElementById('qCode').addEventListener('input', updateCharCounts);
+            document.getElementById('loginPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') handleLogin(); });
         });
 
-        async function checkAuth() {
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/me`, { credentials: 'include' });
-                if (res.ok) { const d = await res.json(); if (d && d.username) { currentUser = d;
-                        showApp(); } else showLogin(); } else showLogin();
-            } catch (e) { showLogin(); }
+        async function checkAuth(){
+            try{ let r=await fetch(API+'/api/me',{credentials:'include'}); if(r.ok){ let d=await r.json(); if(d?.username){ currentUser=d; showApp(); }else showLogin(); }else showLogin(); }catch(e){ showLogin(); }
         }
-
-        function showLogin() { document.getElementById('loginOverlay').classList.remove('hidden');
-            document.getElementById('appContainer').classList.remove('active'); }
-
-        function showApp() {
+        function showLogin(){ document.getElementById('loginOverlay').classList.remove('hidden'); document.getElementById('appContainer').classList.remove('active'); }
+        function showApp(){
             document.getElementById('loginOverlay').classList.add('hidden');
             document.getElementById('appContainer').classList.add('active');
             document.getElementById('displayUsername').textContent = currentUser.username;
-            document.getElementById('displayRole').textContent = currentUser.role === 'admin' ? '掌门' : '弟子';
-            document.getElementById('btnAddQuestion').style.display = currentUser.role === 'admin' ? 'inline-flex' :
-            'none';
+            document.getElementById('displayRole').textContent = currentUser.role==='admin'?'掌门':'弟子';
+            document.getElementById('btnAddQuestion').style.display = currentUser.role==='admin'?'inline-flex':'none';
             loadQuestions();
         }
 
-        async function handleLogin() {
-            const u = document.getElementById('loginUsername').value.trim(),
-                p = document.getElementById('loginPassword').value;
-            const errEl = document.getElementById('loginError');
-            if (!u || !p) { errEl.textContent = '请输入道号和秘钥'; return; }
-            errEl.textContent = '';
-            const btn = document.getElementById('btnLogin');
-            btn.textContent = '开启中…';
-            btn.disabled = true;
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include', body: JSON.stringify({ username: u, password: p }) });
-                const d = await res.json();
-                if (res.ok && d.username) { currentUser = { username: d.username, role: d.role };
-                    showApp();
-                    showToast('卷轴已开启 🏮', 'success'); } else errEl.textContent = d.error || '登录失败';
-            } catch (e) { errEl.textContent = '无法连接服务器'; } finally { btn.textContent = '开 启 卷 轴';
-                btn.disabled = false; }
+        async function handleLogin(){
+            let u=document.getElementById('loginUsername').value.trim(), p=document.getElementById('loginPassword').value;
+            if(!u||!p) return document.getElementById('loginError').textContent='请输入道号和秘钥';
+            let btn=document.getElementById('btnLogin'); btn.textContent='开启中…'; btn.disabled=true;
+            try{
+                let r=await fetch(API+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({username:u,password:p})});
+                let d=await r.json();
+                if(r.ok&&d.username){ currentUser={username:d.username,role:d.role}; showApp(); showToast('卷轴已开启','success'); }
+                else document.getElementById('loginError').textContent=d.error||'登录失败';
+            }catch(e){ document.getElementById('loginError').textContent='无法连接服务器'; }
+            finally{ btn.textContent='开 启 卷 轴'; btn.disabled=false; }
+        }
+        async function handleLogout(){
+            try{await fetch(API+'/api/logout',{method:'POST',credentials:'include'});}catch(e){}
+            currentUser=null; showLogin(); showToast('已归隐','info');
         }
 
-        async function handleLogout() {
-            try { await fetch(`${API_BASE_URL}/api/logout`, { method: 'POST', credentials: 'include' }); } catch (e) {}
-            currentUser = null;
-            showLogin();
-            showToast('已归隐 🌿', 'info');
+        async function loadQuestions(){
+            try{
+                let r=await fetch(API+'/api/questions',{credentials:'include'}); if(r.status===401){handleLogout();return;}
+                let d=await r.json(); allQuestions=d.questions||[]; allCategories=d.categories||[];
+                updateCategoryFilter(); renderQuestions();
+            }catch(e){ showToast('加载失败','error'); }
         }
 
-        async function loadQuestions() {
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/questions`, { credentials: 'include' });
-                if (res.status === 401) { handleLogout(); return; }
-                const d = await res.json();
-                allQuestions = d.questions || [];
-                allCategories = d.categories || [];
-                updateCategoryFilter();
-                renderQuestions();
-            } catch (e) { showToast('加载题目失败', 'error'); }
+        function updateCategoryFilter(){
+            let sel=document.getElementById('filterCategory'), cv=sel.value;
+            sel.innerHTML='<option value="">📂 万卷归宗</option>';
+            allCategories.forEach(c=>sel.innerHTML+=`<option value="${escHtml(c)}" ${cv===c?'selected':''}>📂 ${escHtml(c)}</option>`);
+            document.getElementById('categoryList').innerHTML=allCategories.map(c=>`<option value="${escHtml(c)}">`).join('');
         }
 
-        function updateCategoryFilter() {
-            const sel = document.getElementById('filterCategory');
-            const cv = sel.value;
-            sel.innerHTML = '<option value="">📂 万卷归宗</option>';
-            allCategories.forEach(c => sel.innerHTML +=
-                `<option value="${escHtml(c)}" ${cv===c?'selected':''}>📂 ${escHtml(c)}</option>`);
-            document.getElementById('categorySuggestions').innerHTML = allCategories.map(c =>
-                `<option value="${escHtml(c)}">`).join('');
+        // 渲染 Markdown (但代码块保留原样)
+        function renderMarkdown(text){
+            if(!text) return '';
+            try{ return marked.parse(text,{breaks:true,gfm:true}); }catch(e){ return escHtml(text); }
         }
 
-        // Markdown 渲染函数
-        function renderMarkdown(text) {
-            if (!text) return '';
-            try {
-                return marked.parse(text, { breaks: true, gfm: true });
-            } catch (e) { return `<pre>${escHtml(text)}</pre>`; }
+        async function renderMathMermaid(container){
+            if(window.katex&&renderMathInElement) try{renderMathInElement(container,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}catch(e){}
+            let mermaidEls=container.querySelectorAll('.mermaid'); if(mermaidEls.length) try{await mermaid.run({nodes:mermaidEls,suppressErrors:true});}catch(e){}
+            if(hljs) container.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
         }
 
-        async function renderMathAndMermaid(container) {
-            if (typeof renderMathInElement === 'function' && window.katex) {
-                try {
-                    renderMathInElement(container, {
-                        delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$',
-                            display: false }],
-                        throwOnError: false
-                    });
-                } catch (e) {}
-            }
-            const mermaidEls = container.querySelectorAll('.mermaid');
-            if (mermaidEls.length) {
-                try { await mermaid.run({ nodes: mermaidEls, suppressErrors: true }); } catch (e) {}
-            }
-            if (typeof hljs !== 'undefined') {
-                container.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
-            }
-        }
-
-        function renderQuestions() {
-            const kw = document.getElementById('searchKeyword').value.trim().toLowerCase();
-            const cat = document.getElementById('filterCategory').value;
-            let filtered = allQuestions;
-            if (kw) filtered = filtered.filter(q => (q.number || '').toLowerCase().includes(kw) || (q.name || '')
-                .toLowerCase().includes(kw) || (q.content || '').toLowerCase().includes(kw) || (q.code || '')
-                .toLowerCase().includes(kw) || (q.category || '').toLowerCase().includes(kw));
-            if (cat) filtered = filtered.filter(q => q.category === cat);
-            filtered.sort((a, b) => (a.number && b.number) ? a.number.localeCompare(b.number) : new Date(b.createdAt ||
-                0) - new Date(a.createdAt || 0));
-            document.getElementById('resultCount').textContent = `共 ${filtered.length} 卷`;
-            const grid = document.getElementById('questionsGrid');
-            if (!filtered.length) {
-                grid.innerHTML =
-                    `<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:80px;"><div class="icon">📭</div><p>${allQuestions.length?'无匹配之卷':'尚无题卷'}</p></div>`;
-                return;
-            }
-            const isAdmin = currentUser && currentUser.role === 'admin';
-            grid.innerHTML = filtered.map(q => {
-                const imgs = (q.images && q.images.length) ? `<div class="q-images">${q.images.map(i=>`<img src="${escHtml(i)}" onclick="openLightbox('${escHtml(i)}')" loading="lazy">`).join('')}</div>` : '';
-                const codeHtml = q.code ? `<div class="code-label">💻 真经</div><div class="q-code" style="position:relative;"><button class="copy-btn" onclick="copyCode(event,'${escJs(q.code)}')">📋 抄录</button>${escHtml(q.code)}</div>` : '';
-                const mdHtml = renderMarkdown(q.content || '');
-                const acts = isAdmin ? `<div class="card-actions"><button class="btn btn-outline btn-sm" onclick="openEditModal('${q.id}')">✏️ 修缮</button><button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">🗑 焚毁</button></div>` : '';
-                return `<div class="question-card" data-id="${q.id}">
-              <div class="card-header">${q.number?`<span class="q-number">#${escHtml(q.number)}</span>`:''}${q.category?`<span class="q-category">📂 ${escHtml(q.category)}</span>`:''}</div>
-              <div class="q-name">${escHtml(q.name||'无名之题')}</div>
-              <div class="md-content">${mdHtml}</div>
-              ${imgs}${codeHtml}${acts}</div>`;
+        function renderQuestions(){
+            let kw=document.getElementById('searchKeyword').value.trim().toLowerCase(), cat=document.getElementById('filterCategory').value;
+            let filtered=allQuestions;
+            if(kw) filtered=filtered.filter(q=>(q.number||'').toLowerCase().includes(kw)||(q.name||'').toLowerCase().includes(kw)||(q.content||'').toLowerCase().includes(kw)||(q.code||'').toLowerCase().includes(kw));
+            if(cat) filtered=filtered.filter(q=>q.category===cat);
+            filtered.sort((a,b)=> (a.number&&b.number)?a.number.localeCompare(b.number):new Date(b.createdAt||0)-new Date(a.createdAt||0));
+            document.getElementById('resultCount').textContent=`共 ${filtered.length} 卷`;
+            let grid=document.getElementById('questionsGrid');
+            if(!filtered.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:80px;color:var(--text-dim);">📭 无匹配之卷</div>'; return; }
+            let isAdmin=currentUser?.role==='admin';
+            grid.innerHTML=filtered.map(q=>{
+                let mdPreview = renderMarkdown(q.content||'');
+                let codeBlock = q.code ? `<div class="code-block-mini">${escHtml(q.code)}<button class="copy-mini" onclick="event.stopPropagation();copyCode('${escJs(q.code)}',this)">📋</button></div>` : '';
+                let imgs = (q.images&&q.images.length)?`<div style="display:flex;gap:6px;flex-wrap:wrap;">${q.images.map(i=>`<img src="${escHtml(i)}" style="max-height:80px;border-radius:4px;border:1px solid var(--border-gold);" onclick="event.stopPropagation();openLightbox('${escHtml(i)}')">`).join('')}</div>`:'';
+                return `<div class="question-card" onclick="openDetail('${q.id}')">
+                    <div class="card-header">
+                        ${q.number?`<span class="q-number">#${escHtml(q.number)}</span>`:''}
+                        ${q.category?`<span class="q-category">📂 ${escHtml(q.category)}</span>`:''}
+                    </div>
+                    <div class="q-name">${escHtml(q.name||'无名')}</div>
+                    <div class="md-preview">${mdPreview}</div>
+                    ${imgs}
+                    ${codeBlock}
+                    ${isAdmin?`<div class="card-actions" onclick="event.stopPropagation()">
+                        <button class="btn btn-outline btn-sm" onclick="openEditor('${q.id}')">✏️</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">🗑</button>
+                    </div>`:''}
+                </div>`;
             }).join('');
 
-            // 后渲染数学和图表
-            setTimeout(() => {
-                document.querySelectorAll('.md-content').forEach(el => renderMathAndMermaid(el));
-            }, 50);
+            setTimeout(()=>{
+                document.querySelectorAll('.md-preview').forEach(el=>renderMathMermaid(el));
+            },50);
         }
 
-        function switchEditorTab(tab) {
-            currentEditorTab = tab;
-            document.getElementById('tabWrite').classList.toggle('active', tab === 'write');
-            document.getElementById('tabPreview').classList.toggle('active', tab === 'preview');
-            document.getElementById('qContentSrc').style.display = tab === 'write' ? 'block' : 'none';
-            const previewDiv = document.getElementById('qContentPreview');
-            if (tab === 'preview') {
-                previewDiv.style.display = 'block';
-                const md = document.getElementById('qContentSrc').value;
-                previewDiv.innerHTML = renderMarkdown(md);
-                renderMathAndMermaid(previewDiv);
+        // 查看详情
+        function openDetail(id){
+            let q=allQuestions.find(q=>q.id===id); if(!q) return;
+            document.getElementById('detailTitle').innerHTML = `${q.number?'#'+escHtml(q.number):''} ${escHtml(q.name||'')}`;
+            let contentHtml = renderMarkdown(q.content||'');
+            document.getElementById('detailContent').innerHTML = contentHtml;
+            document.getElementById('detailCode').innerHTML = q.code ? `<h3 style="color:var(--gold-light);margin-bottom:8px;">💻 真经</h3><pre>${escHtml(q.code)}</pre>` : '';
+            document.getElementById('detailModal').style.display='block';
+            setTimeout(()=>renderMathMermaid(document.getElementById('detailContent')), 100);
+        }
+        function closeDetail(){ document.getElementById('detailModal').style.display='none'; }
+
+        // 编辑器
+        function openEditor(id=null){
+            if(currentUser.role!=='admin') return showToast('仅掌门可编辑','error');
+            document.getElementById('editorModal').style.display='block';
+            document.getElementById('editId').value = id||'';
+            if(id){
+                let q=allQuestions.find(q=>q.id===id); if(!q) return;
+                document.getElementById('editorTitle').textContent='✏️ 修缮题目';
+                document.getElementById('qNumber').value=q.number||''; document.getElementById('qName').value=q.name||'';
+                document.getElementById('qCategory').value=q.category||''; document.getElementById('qContentSrc').value=q.content||'';
+                document.getElementById('qCode').value=q.code||''; tempImages=[...(q.images||[])];
+                switchTab('write'); renderImgPreview(); updateEditorStats();
             } else {
-                previewDiv.style.display = 'none';
+                document.getElementById('editorTitle').textContent='📜 录入新题';
+                ['qNumber','qName','qCategory','qContentSrc','qCode','imgUrl'].forEach(id=>document.getElementById(id).value='');
+                tempImages=[]; renderImgPreview(); switchTab('write'); updateEditorStats();
             }
         }
-
-        function openAddModal() {
-            if (currentUser.role !== 'admin') { showToast('仅掌门可录入', 'error'); return; }
-            document.getElementById('modalTitle').textContent = '📜 录入新题';
-            document.getElementById('editId').value = '';
-            ['qNumber', 'qName', 'qCategory', 'qContentSrc', 'qCode', 'imageUrlInput'].forEach(id => document.getElementById(
-                id).value = '');
-            document.getElementById('imageFileInput').value = '';
-            tempImages = [];
-            renderImagePreviews();
-            switchEditorTab('write');
-            updateCharCounts();
-            document.getElementById('questionModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+        function closeEditor(){ document.getElementById('editorModal').style.display='none'; }
+        function switchTab(tab){
+            currentTab=tab;
+            document.getElementById('tabWrite').classList.toggle('active',tab==='write');
+            document.getElementById('tabPreview').classList.toggle('active',tab==='preview');
+            document.getElementById('qContentSrc').style.display = tab==='write'?'block':'none';
+            let preview=document.getElementById('qContentPreview');
+            if(tab==='preview'){
+                preview.style.display='block'; preview.innerHTML=renderMarkdown(document.getElementById('qContentSrc').value);
+                renderMathMermaid(preview);
+            }else preview.style.display='none';
+        }
+        function updateEditorStats(){
+            document.getElementById('contentCharCount').textContent = document.getElementById('qContentSrc').value.length+' 字';
+            document.getElementById('codeCharCount').textContent = document.getElementById('qCode').value.length+' 字';
+        }
+        function uploadImages(){
+            let files=document.getElementById('imgFile').files; if(!files.length) return;
+            Array.from(files).forEach(f=>{
+                if(!f.type.startsWith('image/')) return;
+                let r=new FileReader(); r.onload=ev=>{
+                    let img=new Image(); img.onload=()=>{
+                        let c=document.createElement('canvas'), w=img.width,h=img.height;
+                        if(w>800){h=Math.round(h*800/w); w=800;} c.width=w; c.height=h;
+                        c.getContext('2d').drawImage(img,0,0,w,h); tempImages.push(c.toDataURL('image/jpeg',0.7));
+                        renderImgPreview();
+                    }; img.src=ev.target.result;
+                }; r.readAsDataURL(f);
+            });
+            document.getElementById('imgFile').value='';
+        }
+        function addImgUrl(){
+            let url=document.getElementById('imgUrl').value.trim(); if(!url) return;
+            tempImages.push(url); document.getElementById('imgUrl').value=''; renderImgPreview();
+        }
+        function removeImg(i){ tempImages.splice(i,1); renderImgPreview(); }
+        function renderImgPreview(){
+            let area=document.getElementById('imgPreview');
+            area.innerHTML=tempImages.length?tempImages.map((img,i)=>`<div style="position:relative;width:80px;height:80px;border:1px solid var(--border-gold);border-radius:4px;overflow:hidden;"><img src="${escHtml(img)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22><rect fill=%22%23111%22 width=%2280%22 height=%2280%22/><text x=%2220%22 y=%2245%22 fill=%22%23888%22>破损</text></svg>'"><button onclick="removeImg(${i})" style="position:absolute;top:2px;right:2px;background:rgba(200,60,40,0.9);color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;">×</button></div>`).join(''):'<span style="font-size:12px;color:var(--text-dim);">暂无图卷</span>';
         }
 
-        function openEditModal(id) {
-            const q = allQuestions.find(q => q.id === id);
-            if (!q) { showToast('题目不存在', 'error'); return; }
-            document.getElementById('modalTitle').textContent = '✏️ 修缮题目';
-            document.getElementById('editId').value = q.id;
-            document.getElementById('qNumber').value = q.number || '';
-            document.getElementById('qName').value = q.name || '';
-            document.getElementById('qCategory').value = q.category || '';
-            document.getElementById('qContentSrc').value = q.content || '';
-            document.getElementById('qCode').value = q.code || '';
-            document.getElementById('imageUrlInput').value = '';
-            document.getElementById('imageFileInput').value = '';
-            tempImages = [...(q.images || [])];
-            renderImagePreviews();
-            switchEditorTab('write');
-            updateCharCounts();
-            document.getElementById('questionModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() { document.getElementById('questionModal').style.display = 'none';
-            document.body.style.overflow = ''; }
-
-        async function saveQuestion() {
-            const editId = document.getElementById('editId').value;
-            const number = document.getElementById('qNumber').value.trim();
-            const name = document.getElementById('qName').value.trim();
-            if (!number) { showToast('请输入题号', 'error'); return; }
-            if (!name) { showToast('请输入题名', 'error'); return; }
-            const qData = {
-                number,
-                name,
-                category: document.getElementById('qCategory').value.trim(),
-                content: document.getElementById('qContentSrc').value,
-                code: document.getElementById('qCode').value,
-                images: [...tempImages]
+        async function saveQuestion(){
+            let editId=document.getElementById('editId').value;
+            let number=document.getElementById('qNumber').value.trim(), name=document.getElementById('qName').value.trim();
+            if(!number||!name) return showToast('题号与题名必填','error');
+            let data={
+                number, name, category:document.getElementById('qCategory').value.trim(),
+                content:document.getElementById('qContentSrc').value, code:document.getElementById('qCode').value,
+                images:[...tempImages]
             };
-            const btn = document.getElementById('btnSave');
-            btn.textContent = '收录中…';
-            btn.disabled = true;
-            try {
-                const url = editId ? `${API_BASE_URL}/api/questions/${encodeURIComponent(editId)}` :
-                    `${API_BASE_URL}/api/questions`;
-                const method = editId ? 'PUT' : 'POST';
-                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include', body: JSON.stringify(qData) });
-                if (res.status === 401) { handleLogout(); return; }
-                const d = await res.json();
-                if (res.ok && (d.success || d.question)) { closeModal();
-                    await loadQuestions();
-                    showToast(editId ? '题目已修缮' : '新题已收录', 'success'); } else showToast(d.error || '保存失败',
-                    'error');
-            } catch (e) { showToast('保存失败', 'error'); } finally { btn.textContent = '💾 收录入库';
-                btn.disabled = false; }
+            let btn=document.getElementById('btnSave'); btn.textContent='收录中…'; btn.disabled=true;
+            try{
+                let url=editId?`${API}/api/questions/${encodeURIComponent(editId)}`:`${API}/api/questions`;
+                let method=editId?'PUT':'POST';
+                let r=await fetch(url,{method,headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(data)});
+                if(r.status===401){handleLogout();return;}
+                let d=await r.json();
+                if(r.ok&&(d.success||d.question)){ closeEditor(); await loadQuestions(); showToast(editId?'修缮成功':'新题收录','success'); }
+                else showToast(d.error||'保存失败','error');
+            }catch(e){ showToast('网络错误','error'); }
+            finally{ btn.textContent='💾 收录入库'; btn.disabled=false; }
         }
 
-        async function deleteQuestion(id) {
-            if (!confirm('确定焚毁此题？')) return;
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/questions/${encodeURIComponent(id)}`, { method: 'DELETE',
-                    credentials: 'include' });
-                if (res.status === 401) { handleLogout(); return; }
-                if (res.ok) { await loadQuestions();
-                    showToast('题卷已焚毁', 'info'); }
-            } catch (e) { showToast('删除失败', 'error'); }
+        async function deleteQuestion(id){
+            if(!confirm('确定焚毁此题？')) return;
+            try{
+                let r=await fetch(`${API}/api/questions/${encodeURIComponent(id)}`,{method:'DELETE',credentials:'include'});
+                if(r.status===401){handleLogout();return;}
+                if(r.ok){ await loadQuestions(); showToast('已焚毁','info'); }
+            }catch(e){ showToast('删除失败','error'); }
         }
 
-        function handleImageUpload(e) {
-            const files = e.target.files;
-            if (!files) return;
-            Array.from(files).forEach(f => {
-                if (!f.type.startsWith('image/')) return;
-                const r = new FileReader();
-                r.onload = ev => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const c = document.createElement('canvas');
-                        let w = img.width,
-                            h = img.height;
-                        if (w > 800) { h = Math.round(h * 800 / w);
-                            w = 800; }
-                        c.width = w;
-                        c.height = h;
-                        c.getContext('2d').drawImage(img, 0, 0, w, h);
-                        tempImages.push(c.toDataURL('image/jpeg', 0.7));
-                        renderImagePreviews();
-                    };
-                    img.src = ev.target.result;
-                };
-                r.readAsDataURL(f);
-            });
-            e.target.value = '';
+        function openLightbox(src){ document.getElementById('lightboxImg').src=src; document.getElementById('lightbox').style.display='flex'; }
+        function closeLightbox(){ document.getElementById('lightbox').style.display='none'; }
+        function copyCode(code,btn){
+            navigator.clipboard.writeText(code).then(()=>{btn.textContent='✅';setTimeout(()=>btn.textContent='📋',1500);});
         }
 
-        function addImageUrl() {
-            const url = document.getElementById('imageUrlInput').value.trim();
-            if (url && (url.startsWith('http') || url.startsWith('data:'))) { tempImages.push(url);
-                document.getElementById('imageUrlInput').value = '';
-                renderImagePreviews(); }
+        function showToast(msg,type='info'){
+            let c=document.getElementById('toastContainer'); let t=document.createElement('div');
+            t.className=`toast ${type}`; t.textContent=msg; c.appendChild(t);
+            setTimeout(()=>{t.style.opacity='0';t.style.transition='0.3s';setTimeout(()=>t.remove(),300);},2500);
         }
 
-        function removeTempImage(i) { tempImages.splice(i, 1);
-            renderImagePreviews(); }
+        function escHtml(s){ let d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+        function escJs(s){ return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n'); }
 
-        function renderImagePreviews() {
-            const area = document.getElementById('imagePreviewArea');
-            area.innerHTML = tempImages.length ? tempImages.map((img, i) => `
-            <div style="position:relative;width:100px;height:100px;border-radius:4px;overflow:hidden;border:1px solid var(--border-gold);">
-              <img src="${escHtml(img)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23111%22 width=%22100%22 height=%22100%22/><text x=%2225%22 y=%2255%22 fill=%22%23888%22>破损</text></svg>'">
-              <button onclick="removeTempImage(${i})" style="position:absolute;top:2px;right:2px;background:rgba(200,60,40,0.9);color:#fff;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;">×</button>
-            </div>`).join('') : '<span style="font-size:12px;color:#8a8068;">暂无图卷</span>';
-        }
-
-        function openLightbox(src) { document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightbox').style.display = 'flex'; }
-
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-
-        function copyCode(e, code) {
-            e.stopPropagation();
-            navigator.clipboard.writeText(code).then(() => {
-                const b = e.target;
-                b.textContent = '✅ 已抄录';
-                setTimeout(() => b.textContent = '📋 抄录', 1500);
-            });
-        }
-
-        function updateCharCounts() {
-            document.getElementById('contentCharCount').textContent = document.getElementById('qContentSrc').value.length +
-                ' 字';
-            document.getElementById('codeCharCount').textContent = document.getElementById('qCode').value.length + ' 字';
-        }
-
-        function showToast(msg, type = 'info') {
-            const c = document.getElementById('toastContainer');
-            const t = document.createElement('div');
-            t.className = `toast ${type}`;
-            t.textContent = msg;
-            c.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0';
-                t.style.transition = '0.3s';
-                setTimeout(() => t.remove(), 300); }, 2500);
-        }
-
-        function escHtml(s) { const d = document.createElement('div');
-            d.textContent = s; return d.innerHTML; }
-
-        function escJs(s) { return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n'); }
-
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                if (document.getElementById('lightbox').style.display === 'flex') closeLightbox();
-                else if (document.getElementById('questionModal').style.display === 'block') closeModal();
+        document.addEventListener('keydown',e=>{
+            if(e.key==='Escape'){
+                if(document.getElementById('lightbox').style.display==='flex') closeLightbox();
+                else if(document.getElementById('detailModal').style.display==='block') closeDetail();
+                else if(document.getElementById('editorModal').style.display==='block') closeEditor();
             }
         });
     </script>
