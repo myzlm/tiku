@@ -6,21 +6,16 @@
     <title>📚 墨韵题库 · 古风科技</title>
 
     <!-- Markdown 解析 -->
-    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <!-- 代码高亮 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" id="hljs-style">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <!-- KaTeX 数学公式 -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.css">
-    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.js">
-    </script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js">
-    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
     <!-- Mermaid 图表 -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 
     <style>
         :root {
@@ -1338,89 +1333,7 @@
             const API = 'https://myzlm.serveousercontent.com';
             const PAGE_SIZE = 12;
 
-            // ==================== 全局状态 ====================
-            let allQuestions = [],
-                allCategories = [],
-                allTags = [],
-                currentUser = null,
-                tempImages = [],
-                currentTab = 'write',
-                viewMode = 'grid',
-                currentPage = 1,
-                activeTagFilter = '',
-                searchDebounceTimer = null,
-                isLoading = false;
-
-            // ==================== DOM引用缓存 ====================
-            const $ = (sel) => document.querySelector(sel);
-            const $$ = (sel) => document.querySelectorAll(sel);
-
-            const domRefs = {
-                get loginOverlay() { return $('#loginOverlay'); },
-                get appContainer() { return $('#appContainer'); },
-                get loginError() { return $('#loginError'); },
-                get displayUsername() { return $('#displayUsername'); },
-                get displayRole() { return $('#displayRole'); },
-                get btnAddQuestion() { return $('#btnAddQuestion'); },
-                get searchKeyword() { return $('#searchKeyword'); },
-                get filterCategory() { return $('#filterCategory'); },
-                get resultCount() { return $('#resultCount'); },
-                get questionsGrid() { return $('#questionsGrid'); },
-                get pagination() { return $('#pagination'); },
-                get statsBar() { return $('#statsBar'); },
-                get statTotal() { return $('#statTotal'); },
-                get statCategories() { return $('#statCategories'); },
-                get statPage() { return $('#statPage'); },
-                get statTagItem() { return $('#statTagItem'); },
-                get statTagDivider() { return $('#statTagDivider'); },
-                get statActiveTag() { return $('#statActiveTag'); },
-                get editorModal() { return $('#editorModal'); },
-                get detailModal() { return $('#detailModal'); },
-                get lightbox() { return $('#lightbox'); },
-                get lightboxImg() { return $('#lightboxImg'); },
-                get backToTop() { return $('#backToTop'); },
-                get editId() { return $('#editId'); },
-                get qNumber() { return $('#qNumber'); },
-                get qName() { return $('#qName'); },
-                get qCategory() { return $('#qCategory'); },
-                get qTags() { return $('#qTags'); },
-                get qContentSrc() { return $('#qContentSrc'); },
-                get qContentPreview() { return $('#qContentPreview'); },
-                get qCode() { return $('#qCode'); },
-                get imgUrl() { return $('#imgUrl'); },
-                get imgPreview() { return $('#imgPreview'); },
-                get btnSave() { return $('#btnSave'); },
-                get editorTitle() { return $('#editorTitle'); },
-                get detailTitle() { return $('#detailTitle'); },
-                get detailContent() { return $('#detailContent'); },
-                get detailCode() { return $('#detailCode'); },
-                get viewGrid() { return $('#viewGrid'); },
-                get viewList() { return $('#viewList'); },
-                get tabWrite() { return $('#tabWrite'); },
-                get tabPreview() { return $('#tabPreview'); },
-                get contentCharCount() { return $('#contentCharCount'); },
-                get codeCharCount() { return $('#codeCharCount'); },
-                get categoryList() { return $('#categoryList'); },
-            };
-
-            // ==================== 粒子系统（水墨金粉） ====================
-            const canvas = document.getElementById('particleCanvas'),
-                ctx = canvas.getContext('2d');
-            let particles = [],
-                mouseParticles = [],
-                particleCount = 80;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                // 移动端减少粒子
-                particleCount = window.innerWidth < 600 ? 40 : 80;
-                if (particles.length > particleCount) particles.length = particleCount;
-                while (particles.length < particleCount) particles.push(new Particle());
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-
+            // ==================== 粒子类（必须在 resizeCanvas 之前定义） ====================
             class Particle {
                 constructor(x, y) {
                     this.reset(x, y);
@@ -1490,7 +1403,28 @@
                 get dead() { return this.life <= 0; }
             }
 
-            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+            // ==================== 粒子系统初始化 ====================
+            const canvas = document.getElementById('particleCanvas'),
+                ctx = canvas.getContext('2d');
+            let particles = [],
+                mouseParticles = [],
+                particleCount = 80;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                // 移动端减少粒子
+                particleCount = window.innerWidth < 600 ? 40 : 80;
+                // 调整粒子数组大小
+                if (particles.length > particleCount) {
+                    particles.length = particleCount;
+                }
+                while (particles.length < particleCount) {
+                    particles.push(new Particle());
+                }
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); // 现在可以安全调用，因为 Particle 已经定义
 
             function burstParticles(x, y) {
                 for (let i = 0; i < 16; i++) mouseParticles.push(new SparkParticle(x, y));
@@ -1510,6 +1444,71 @@
                 requestAnimationFrame(animateParticles);
             }
             animateParticles();
+
+            // ==================== 全局状态 ====================
+            let allQuestions = [],
+                allCategories = [],
+                allTags = [],
+                currentUser = null,
+                tempImages = [],
+                currentTab = 'write',
+                viewMode = 'grid',
+                currentPage = 1,
+                activeTagFilter = '',
+                searchDebounceTimer = null,
+                isLoading = false;
+
+            // ==================== DOM引用缓存 ====================
+            const $ = (sel) => document.querySelector(sel);
+            const $$ = (sel) => document.querySelectorAll(sel);
+
+            const domRefs = {
+                get loginOverlay() { return $('#loginOverlay'); },
+                get appContainer() { return $('#appContainer'); },
+                get loginError() { return $('#loginError'); },
+                get displayUsername() { return $('#displayUsername'); },
+                get displayRole() { return $('#displayRole'); },
+                get btnAddQuestion() { return $('#btnAddQuestion'); },
+                get searchKeyword() { return $('#searchKeyword'); },
+                get filterCategory() { return $('#filterCategory'); },
+                get resultCount() { return $('#resultCount'); },
+                get questionsGrid() { return $('#questionsGrid'); },
+                get pagination() { return $('#pagination'); },
+                get statsBar() { return $('#statsBar'); },
+                get statTotal() { return $('#statTotal'); },
+                get statCategories() { return $('#statCategories'); },
+                get statPage() { return $('#statPage'); },
+                get statTagItem() { return $('#statTagItem'); },
+                get statTagDivider() { return $('#statTagDivider'); },
+                get statActiveTag() { return $('#statActiveTag'); },
+                get editorModal() { return $('#editorModal'); },
+                get detailModal() { return $('#detailModal'); },
+                get lightbox() { return $('#lightbox'); },
+                get lightboxImg() { return $('#lightboxImg'); },
+                get backToTop() { return $('#backToTop'); },
+                get editId() { return $('#editId'); },
+                get qNumber() { return $('#qNumber'); },
+                get qName() { return $('#qName'); },
+                get qCategory() { return $('#qCategory'); },
+                get qTags() { return $('#qTags'); },
+                get qContentSrc() { return $('#qContentSrc'); },
+                get qContentPreview() { return $('#qContentPreview'); },
+                get qCode() { return $('#qCode'); },
+                get imgUrl() { return $('#imgUrl'); },
+                get imgPreview() { return $('#imgPreview'); },
+                get btnSave() { return $('#btnSave'); },
+                get editorTitle() { return $('#editorTitle'); },
+                get detailTitle() { return $('#detailTitle'); },
+                get detailContent() { return $('#detailContent'); },
+                get detailCode() { return $('#detailCode'); },
+                get viewGrid() { return $('#viewGrid'); },
+                get viewList() { return $('#viewList'); },
+                get tabWrite() { return $('#tabWrite'); },
+                get tabPreview() { return $('#tabPreview'); },
+                get contentCharCount() { return $('#contentCharCount'); },
+                get codeCharCount() { return $('#codeCharCount'); },
+                get categoryList() { return $('#categoryList'); },
+            };
 
             // ==================== 工具函数 ====================
             function escHtml(s) {
@@ -1562,7 +1561,6 @@
                 const mermaidEls = container.querySelectorAll('.mermaid');
                 if (mermaidEls.length > 0 && window.mermaid) {
                     try {
-                        // 确保元素可见
                         const originalDisplay = container.style.display;
                         if (originalDisplay === 'none') {
                             container.style.display = 'block';
@@ -1595,7 +1593,6 @@
                         btn.style.color = '';
                     }, 1500);
                 }).catch(() => {
-                    // fallback
                     const ta = document.createElement('textarea');
                     ta.value = text;
                     ta.style.position = 'fixed';
@@ -1706,7 +1703,6 @@
                         images: q.images || []
                     }));
                     allCategories = d.categories || [];
-                    // 收集所有标签
                     const tagSet = new Set();
                     allQuestions.forEach(q => (q.tags || []).forEach(t => tagSet.add(t)));
                     allTags = Array.from(tagSet).sort();
@@ -1737,16 +1733,14 @@
                     sel.innerHTML +=
                         `<option value="${escHtml(c)}" ${cv===c?'selected':''}>📂 ${escHtml(c)}</option>`;
                 });
-                // 更新datalist
                 domRefs.categoryList.innerHTML = allCategories.map(c => `<option value="${escHtml(c)}">`).join('');
             }
 
             function updateTagSuggestions() {
-                // 标签建议存储在全局，搜索时可匹配
                 window._allTags = allTags;
             }
 
-            // ==================== 搜索（防抖） ====================
+            // ==================== 搜索 ====================
             function onSearchInput() {
                 clearTimeout(searchDebounceTimer);
                 searchDebounceTimer = setTimeout(() => {
@@ -1782,7 +1776,6 @@
                 domRefs.viewGrid.classList.toggle('active', mode === 'grid');
                 domRefs.viewList.classList.toggle('active', mode === 'list');
                 domRefs.questionsGrid.classList.toggle('list-view', mode === 'list');
-                // 列表视图下每页显示更多
                 renderQuestions();
             }
 
@@ -1808,7 +1801,6 @@
                 if (cat) {
                     filtered = filtered.filter(q => q.category === cat);
                 }
-                // 排序
                 filtered.sort((a, b) => {
                     if (a.number && b.number) return a.number.localeCompare(b.number);
                     return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
@@ -1824,14 +1816,12 @@
                 const startIdx = (currentPage - 1) * PAGE_SIZE;
                 const pageItems = filtered.slice(startIdx, startIdx + PAGE_SIZE);
 
-                // 更新统计
                 domRefs.statTotal.textContent = allQuestions.length;
                 domRefs.statCategories.textContent = allCategories.length;
                 domRefs.statPage.textContent = `${currentPage}/${totalPages}`;
                 domRefs.resultCount.textContent = `共 ${totalFiltered} 卷`;
                 updateTagFilterUI();
 
-                // 渲染网格
                 const grid = domRefs.questionsGrid;
                 const isAdmin = currentUser?.role === 'admin';
 
@@ -1875,10 +1865,8 @@
                     </div>`;
                 }).join('');
 
-                // 渲染分页
                 renderPagination(totalPages, totalFiltered);
 
-                // 异步渲染数学公式和图表
                 setTimeout(() => {
                     grid.querySelectorAll('.md-preview').forEach(el => renderMathMermaid(el));
                 }, 80);
@@ -1921,7 +1909,7 @@
                 domRefs.questionsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
-            // 暴露到全局作用域（用于内联onclick）
+            // 暴露到全局作用域
             window.goToPage = goToPage;
             window.copyCodeDirect = function(code, btn) { copyToClipboard(code, btn); };
             window.filterByTag = filterByTag;
@@ -2187,13 +2175,11 @@
                     else if (domRefs.detailModal.style.display === 'block') closeDetail();
                     else if (domRefs.editorModal.style.display === 'block') closeEditor();
                 }
-                // Ctrl+K 聚焦搜索
                 if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                     e.preventDefault();
                     domRefs.searchKeyword.focus();
                     domRefs.searchKeyword.select();
                 }
-                // 左右箭头翻页
                 if (!e.target.closest('input,textarea,select') && !e.ctrlKey && !e.metaKey) {
                     if (e.key === 'ArrowLeft' && domRefs.pagination.innerHTML) goToPage(currentPage - 1);
                     if (e.key === 'ArrowRight' && domRefs.pagination.innerHTML) goToPage(currentPage + 1);
