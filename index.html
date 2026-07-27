@@ -25,39 +25,27 @@
             --gold: #d4a853;
             --gold-light: #f0d078;
             --gold-dark: #8b6914;
-            --gold-soft: #c9a24e;
             --jade: #5a8f7b;
             --jade-light: #7ec8a0;
-            --jade-dark: #3d6b5a;
             --ink: #c9b896;
             --ink-light: #e8dcc8;
             --ink-dim: #8a8068;
             --red-seal: #c23a2b;
-            --red-seal-dark: #8b1f15;
             --neon-blue: #4da6ff;
-            --neon-blue-dim: #2d7acc;
             --neon-purple: #a78bfa;
             --text: #d4c8b0;
             --text-dim: #8a8068;
-            --text-muted: #5e5848;
             --border-gold: rgba(212, 168, 83, 0.35);
             --border-gold-hover: rgba(240, 208, 120, 0.6);
             --border-jade: rgba(90, 143, 123, 0.3);
             --shadow-gold: 0 0 20px rgba(212, 168, 83, 0.3);
             --shadow-gold-strong: 0 0 40px rgba(240, 208, 120, 0.45);
-            --shadow-neon: 0 0 30px rgba(77, 166, 255, 0.25);
-            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.55);
-            --font-cn: 'STSong', 'Songti SC', 'Noto Serif SC', 'SimSun', 'KaiTi', 'PingFang SC', 'Microsoft YaHei', serif;
-            --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'Monaco', monospace;
-            --radius-sm: 3px;
-            --radius: 5px;
-            --radius-lg: 10px;
-            --radius-xl: 14px;
-            --transition-fast: 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --transition-slow: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            --page-padding: 24px;
+            --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+            --font-cn: 'STSong','Songti SC','Noto Serif SC','SimSun','KaiTi','PingFang SC','Microsoft YaHei',serif;
+            --font-mono: 'SF Mono','Fira Code','Cascadia Code','Consolas','Monaco',monospace;
+            --radius-sm:3px; --radius:5px; --radius-lg:10px; --radius-xl:14px;
+            --transition-fast:0.18s cubic-bezier(0.25,0.46,0.45,0.94);
+            --transition:0.3s cubic-bezier(0.25,0.46,0.45,0.94);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -69,64 +57,45 @@
         }
         body::before {
             content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
-            background:
-                radial-gradient(ellipse at 12% 88%, rgba(90,143,123,0.07) 0%, transparent 50%),
-                radial-gradient(ellipse at 88% 12%, rgba(212,168,83,0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(77,166,255,0.03) 0%, transparent 65%),
-                radial-gradient(ellipse at 22% 22%, rgba(167,139,250,0.04) 0%, transparent 48%);
+            background: radial-gradient(ellipse at 12% 88%, rgba(90,143,123,0.07) 0%, transparent 50%),
+                        radial-gradient(ellipse at 88% 12%, rgba(212,168,83,0.05) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(77,166,255,0.03) 0%, transparent 65%),
+                        radial-gradient(ellipse at 22% 22%, rgba(167,139,250,0.04) 0%, transparent 48%);
         }
         body::after {
             content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0.03;
-            background-image:
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(180,160,120,0.15) 2px, rgba(180,160,120,0.15) 3px),
-                repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(160,140,100,0.1) 3px, rgba(160,140,100,0.1) 4px);
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(180,160,120,0.15) 2px, rgba(180,160,120,0.15) 3px),
+                            repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(160,140,100,0.1) 3px, rgba(160,140,100,0.1) 4px);
         }
         .mountains-bg {
             position:fixed; bottom:0; left:0; width:100%; height:30vh; z-index:0; pointer-events:none; opacity:0.2;
-            background: linear-gradient(175deg, transparent 35%, rgba(24,22,34,0.85) 65%, rgba(16,14,24,0.94) 100%);
+            background:linear-gradient(175deg, transparent 35%, rgba(24,22,34,0.85) 65%, rgba(16,14,24,0.94) 100%);
         }
 
-        /* 登录覆盖层 */
-        .login-overlay {
-            position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center;
-            background: radial-gradient(ellipse at center, rgba(10,8,20,0.9) 0%, rgba(4,3,10,0.96) 100%);
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
+        /* 登录 */
+        .login-overlay { position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; background:radial-gradient(ellipse at center, rgba(10,8,20,0.9) 0%, rgba(4,3,10,0.96) 100%); transition:opacity 0.6s, visibility 0.6s; }
         .login-overlay.hidden { opacity:0; visibility:hidden; pointer-events:none; }
-        .login-card {
-            background:var(--bg-card); border:1.5px solid var(--border-gold); border-radius:var(--radius-xl);
-            padding:50px 42px; width:450px; max-width:92vw; text-align:center;
-            box-shadow:var(--shadow-gold-strong), var(--shadow-elevated); backdrop-filter:blur(24px);
-            -webkit-backdrop-filter:blur(24px); animation:cardGlow 4s ease-in-out infinite; position:relative;
-        }
-        .login-card::before {
-            content:''; position:absolute; top:-36px; left:50%; transform:translateX(-50%);
-            width:62px; height:62px; border-radius:50%; border:2px solid rgba(194,58,43,0.5);
-            background:rgba(194,58,43,0.08); box-shadow:0 0 25px rgba(194,58,43,0.3); pointer-events:none;
-        }
-        @keyframes cardGlow {
-            0%,100% { box-shadow:0 0 25px rgba(212,168,83,0.3), 0 0 60px rgba(212,168,83,0.08), var(--shadow-elevated); }
-            50% { box-shadow:0 0 45px rgba(240,208,120,0.4), 0 0 85px rgba(212,168,83,0.18), var(--shadow-elevated); }
-        }
-        .login-card .seal-icon { font-size:58px; filter:drop-shadow(0 0 14px rgba(212,168,83,0.55)); animation:sealFloat 2.5s ease-in-out infinite; position:relative; z-index:1; }
+        .login-card { background:var(--bg-card); border:1.5px solid var(--border-gold); border-radius:var(--radius-xl); padding:50px 42px; width:450px; max-width:92vw; text-align:center; box-shadow:var(--shadow-gold-strong); backdrop-filter:blur(24px); animation:cardGlow 4s ease-in-out infinite; position:relative; }
+        .login-card::before { content:''; position:absolute; top:-36px; left:50%; transform:translateX(-50%); width:62px; height:62px; border-radius:50%; border:2px solid rgba(194,58,43,0.5); background:rgba(194,58,43,0.08); box-shadow:0 0 25px rgba(194,58,43,0.3); }
+        @keyframes cardGlow { 0%,100%{ box-shadow:0 0 25px rgba(212,168,83,0.3),0 0 60px rgba(212,168,83,0.08); } 50%{ box-shadow:0 0 45px rgba(240,208,120,0.4),0 0 85px rgba(212,168,83,0.18); } }
+        .login-card .seal-icon { font-size:58px; filter:drop-shadow(0 0 14px rgba(212,168,83,0.55)); animation:sealFloat 2.5s ease-in-out infinite; }
         @keyframes sealFloat { 0%,100%{ transform:translateY(0); } 35%{ transform:translateY(-10px); } 65%{ transform:translateY(-3px); } }
-        .login-card h1 { font-size:27px; color:var(--gold-light); letter-spacing:5px; margin-bottom:2px; font-weight:700; position:relative; z-index:1; }
-        .login-card .subtitle { font-size:13px; color:var(--text-dim); margin-bottom:30px; letter-spacing:3px; position:relative; z-index:1; }
-        .login-card .input-group { margin-bottom:15px; text-align:left; position:relative; z-index:1; }
-        .login-card label { display:block; font-size:13px; font-weight:600; margin-bottom:7px; color:var(--ink-light); letter-spacing:1px; }
-        .login-card input { width:100%; padding:13px 16px; border:1.5px solid var(--border-gold); border-radius:var(--radius); background:rgba(8,8,18,0.65); color:var(--ink-light); font-family:inherit; font-size:15px; transition:var(--transition); letter-spacing:1px; }
-        .login-card input:focus { outline:none; border-color:var(--gold-light); box-shadow:0 0 22px rgba(240,208,120,0.35); background:rgba(10,10,22,0.8); }
-        .login-card .btn-login { width:100%; padding:14px; background:linear-gradient(135deg, #6b4e0e 0%, #8b6914 25%, #b8942e 50%, #d4a853 75%, #8b6914 100%); color:#1a1608; border:1px solid rgba(240,208,120,0.55); border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; letter-spacing:4px; transition:var(--transition); position:relative; z-index:1; font-family:inherit; }
+        .login-card h1 { font-size:27px; color:var(--gold-light); letter-spacing:5px; margin-bottom:2px; }
+        .login-card .subtitle { font-size:13px; color:var(--text-dim); margin-bottom:30px; letter-spacing:3px; }
+        .login-card .input-group { margin-bottom:15px; text-align:left; }
+        .login-card label { display:block; font-size:13px; font-weight:600; margin-bottom:7px; color:var(--ink-light); }
+        .login-card input { width:100%; padding:13px 16px; border:1.5px solid var(--border-gold); border-radius:var(--radius); background:rgba(8,8,18,0.65); color:var(--ink-light); font-family:inherit; font-size:15px; transition:var(--transition); }
+        .login-card input:focus { outline:none; border-color:var(--gold-light); box-shadow:0 0 22px rgba(240,208,120,0.35); }
+        .login-card .btn-login { width:100%; padding:14px; background:linear-gradient(135deg, #6b4e0e, #8b6914 25%, #b8942e 50%, #d4a853 75%, #8b6914); color:#1a1608; border:1px solid rgba(240,208,120,0.55); border-radius:var(--radius); font-size:16px; font-weight:700; cursor:pointer; letter-spacing:4px; transition:var(--transition); font-family:inherit; }
         .login-card .btn-login:hover { box-shadow:0 0 40px rgba(240,208,120,0.6); transform:translateY(-2px); filter:brightness(1.1); }
-        .login-card .btn-login:active { transform:scale(0.97); transition:0.1s; }
-        .login-card .error-msg { color:#e85d4a; font-size:13px; margin-top:14px; min-height:20px; letter-spacing:1px; position:relative; z-index:1; }
+        .login-card .error-msg { color:#e85d4a; font-size:13px; margin-top:14px; min-height:20px; }
 
         /* 主应用 */
-        .app-container { display:none; max-width:1400px; margin:0 auto; padding:var(--page-padding); position:relative; z-index:2; }
+        .app-container { display:none; max-width:1400px; margin:0 auto; padding:24px; position:relative; z-index:2; }
         .app-container.active { display:block; animation:fadeUpIn 0.5s ease-out; }
         @keyframes fadeUpIn { from{ opacity:0; transform:translateY(24px); } to{ opacity:1; transform:translateY(0); } }
 
-        .app-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:22px; background:var(--bg-card); padding:16px 26px; border-radius:var(--radius-lg); border:1px solid var(--border-gold); box-shadow:var(--shadow-gold),var(--shadow-card); backdrop-filter:blur(16px); }
+        .app-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:22px; background:var(--bg-card); padding:16px 26px; border-radius:var(--radius-lg); border:1px solid var(--border-gold); box-shadow:var(--shadow-gold); backdrop-filter:blur(16px); }
         .app-header .brand { display:flex; align-items:center; gap:10px; font-size:21px; font-weight:700; color:var(--gold-light); letter-spacing:3px; }
         .app-header .brand .logo-icon { font-size:30px; animation:sealFloat 3s ease-in-out infinite; filter:drop-shadow(0 0 10px rgba(212,168,83,0.5)); }
         .user-info-area { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
@@ -134,98 +103,86 @@
         .badge-role.admin { background:rgba(212,168,83,0.15); color:var(--gold-light); border-color:rgba(212,168,83,0.4); }
 
         .btn { padding:9px 18px; border:none; border-radius:var(--radius); font-size:13px; font-weight:600; cursor:pointer; letter-spacing:1.5px; font-family:inherit; transition:var(--transition-fast); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
-        .btn:active { transform:scale(0.95); transition:0.08s; }
-        .btn-primary { background:linear-gradient(135deg, #5a3e0e, #8b6914 45%, #5a3e0e); color:#f0d078; border:1px solid rgba(240,208,120,0.5); box-shadow:0 2px 12px rgba(139,105,20,0.3); }
-        .btn-primary:hover { box-shadow:0 4px 22px rgba(240,208,120,0.45); filter:brightness(1.08); }
+        .btn:active { transform:scale(0.95); }
+        .btn-primary { background:linear-gradient(135deg, #5a3e0e, #8b6914 45%, #5a3e0e); color:#f0d078; border:1px solid rgba(240,208,120,0.5); }
         .btn-outline { background:transparent; color:var(--gold-light); border:1.5px solid var(--border-gold); }
-        .btn-outline:hover { border-color:var(--border-gold-hover); box-shadow:0 0 18px rgba(212,168,83,0.25); background:rgba(212,168,83,0.06); }
+        .btn-outline:hover { border-color:var(--border-gold-hover); box-shadow:0 0 18px rgba(212,168,83,0.25); }
         .btn-danger { background:transparent; color:#e85d4a; border:1.5px solid rgba(200,60,40,0.5); }
-        .btn-danger:hover { border-color:rgba(230,80,60,0.7); box-shadow:0 0 18px rgba(200,60,40,0.3); background:rgba(200,60,40,0.07); }
+        .btn-danger:hover { border-color:rgba(230,80,60,0.7); box-shadow:0 0 18px rgba(200,60,40,0.3); }
         .btn-ghost { background:transparent; color:var(--text-dim); border:1px solid transparent; }
-        .btn-ghost:hover { color:var(--ink-light); border-color:rgba(255,255,255,0.15); background:rgba(255,255,255,0.03); }
-        .btn-sm { padding:5px 12px; font-size:11px; border-radius:var(--radius-sm); }
-        .btn-xs { padding:3px 10px; font-size:10px; letter-spacing:0.5px; }
+        .btn-sm { padding:5px 12px; font-size:11px; }
+        .btn-xs { padding:3px 10px; font-size:10px; }
 
         .search-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; align-items:center; }
         .search-bar input, .search-bar select { padding:10px 15px; border:1.5px solid var(--border-gold); border-radius:var(--radius); font-size:13px; background:rgba(14,12,24,0.7); color:var(--ink-light); font-family:inherit; transition:var(--transition-fast); backdrop-filter:blur(8px); }
-        .search-bar input:focus, .search-bar select:focus { outline:none; border-color:var(--gold-light); box-shadow:0 0 16px rgba(240,208,120,0.3); }
+        .search-bar input:focus, .search-bar select:focus { outline:none; border-color:var(--gold-light); }
         .search-bar input { flex:1; min-width:180px; }
         .search-bar select { min-width:140px; cursor:pointer; }
-        .search-bar .result-count { color:var(--text-dim); font-size:12px; white-space:nowrap; }
+        .result-count { color:var(--text-dim); font-size:12px; }
 
-        .stats-bar { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px; padding:12px 18px; background:rgba(18,16,28,0.6); border-radius:var(--radius); border:1px solid rgba(255,255,255,0.06); backdrop-filter:blur(8px); }
+        .stats-bar { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px; padding:12px 18px; background:rgba(18,16,28,0.6); border-radius:var(--radius); border:1px solid rgba(255,255,255,0.06); }
         .stat-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-dim); }
-        .stat-item .stat-value { color:var(--gold-light); font-weight:700; font-size:15px; font-family:var(--font-mono); }
-        .stat-divider { width:1px; height:22px; background:rgba(255,255,255,0.1); align-self:center; }
+        .stat-value { color:var(--gold-light); font-weight:700; font-size:15px; font-family:var(--font-mono); }
+        .stat-divider { width:1px; height:22px; background:rgba(255,255,255,0.1); }
 
         .questions-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(420px,1fr)); gap:16px; margin-bottom:20px; }
         @media (max-width:500px) { .questions-grid { grid-template-columns:1fr; } }
 
-        .question-card {
-            background:var(--bg-card); border-radius:var(--radius-lg); padding:20px 18px;
-            transition:var(--transition); border:1px solid var(--border-gold); position:relative;
-            display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow-card);
-            backdrop-filter:blur(12px); cursor:pointer; overflow:hidden; animation:cardIn 0.4s ease-out backwards;
-        }
-        @keyframes cardIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-        .question-card:hover { border-color:var(--border-gold-hover); box-shadow:0 0 32px rgba(240,208,120,0.18),0 6px 30px rgba(0,0,0,0.45); transform:translateY(-4px); background:var(--bg-card-hover); }
-        .question-card:active { transform:scale(0.985); transition:0.1s; }
-        .question-card .card-header { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-        .question-card .q-number { font-family:var(--font-mono); font-size:11px; color:var(--gold-light); background:rgba(212,168,83,0.1); padding:3px 11px; border-radius:20px; border:1px solid rgba(212,168,83,0.3); }
-        .question-card .q-category { font-size:11px; background:rgba(90,143,123,0.13); color:var(--jade-light); padding:3px 11px; border-radius:20px; border:1px solid var(--border-jade); }
-        .question-card .q-tags { display:flex; gap:5px; flex-wrap:wrap; }
-        .question-card .q-tag { font-size:10px; background:rgba(167,139,250,0.1); color:#c4b5fd; padding:2px 9px; border-radius:15px; border:1px solid rgba(167,139,250,0.25); cursor:pointer; transition:var(--transition-fast); }
-        .question-card .q-tag:hover { background:rgba(167,139,250,0.22); border-color:rgba(167,139,250,0.5); color:#ddd0ff; }
-        .question-card .q-name { font-size:17px; font-weight:700; color:var(--ink-light); letter-spacing:1px; line-height:1.4; }
+        .question-card { background:var(--bg-card); border-radius:var(--radius-lg); padding:20px 18px; transition:var(--transition); border:1px solid var(--border-gold); display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow-card); backdrop-filter:blur(12px); cursor:pointer; animation:cardIn 0.4s ease-out backwards; }
+        @keyframes cardIn { from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+        .question-card:hover { border-color:var(--border-gold-hover); transform:translateY(-4px); background:var(--bg-card-hover); }
+        .card-header { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .q-number { font-family:var(--font-mono); font-size:11px; color:var(--gold-light); background:rgba(212,168,83,0.1); padding:3px 11px; border-radius:20px; border:1px solid rgba(212,168,83,0.3); }
+        .q-category { font-size:11px; background:rgba(90,143,123,0.13); color:var(--jade-light); padding:3px 11px; border-radius:20px; border:1px solid var(--border-jade); }
+        .q-tags { display:flex; gap:5px; flex-wrap:wrap; }
+        .q-tag { font-size:10px; background:rgba(167,139,250,0.1); color:#c4b5fd; padding:2px 9px; border-radius:15px; border:1px solid rgba(167,139,250,0.25); cursor:pointer; transition:var(--transition-fast); }
+        .q-name { font-size:17px; font-weight:700; color:var(--ink-light); letter-spacing:1px; }
         .card-images-row { display:flex; gap:6px; flex-wrap:wrap; }
         .card-images-row img { max-height:70px; border-radius:4px; border:1px solid var(--border-gold); cursor:pointer; transition:var(--transition-fast); object-fit:cover; }
-        .card-images-row img:hover { border-color:var(--gold-light); box-shadow:0 0 14px rgba(212,168,83,0.35); transform:scale(1.04); }
         .card-actions { display:flex; gap:7px; justify-content:flex-end; padding-top:4px; }
 
-        /* 分页 */
         .pagination { display:flex; align-items:center; justify-content:center; gap:8px; padding:16px 0; flex-wrap:wrap; }
         .pagination button { padding:8px 15px; border:1px solid var(--border-gold); border-radius:var(--radius); background:rgba(14,12,24,0.6); color:var(--ink-light); cursor:pointer; font-family:inherit; font-size:13px; transition:var(--transition-fast); }
-        .pagination button:hover:not(:disabled) { border-color:var(--gold-light); background:rgba(212,168,83,0.1); }
         .pagination button.active { background:rgba(212,168,83,0.2); border-color:var(--gold-light); color:var(--gold-light); font-weight:700; }
         .pagination button:disabled { opacity:0.35; cursor:not-allowed; }
         .pagination .page-info { color:var(--text-dim); font-size:12px; padding:0 8px; }
 
         /* 模态框 */
         .modal-overlay { position:fixed; inset:0; background:rgba(3,3,10,0.88); z-index:1000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.2s; backdrop-filter:blur(4px); }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-        .modal-panel { background:var(--bg-card); border:1.5px solid var(--border-gold); border-radius:var(--radius-xl); box-shadow:var(--shadow-gold-strong),var(--shadow-elevated); width:780px; max-width:94vw; max-height:84vh; overflow-y:auto; padding:30px 26px; animation:slideUp 0.35s; color:var(--text); }
-        @keyframes slideUp { from { opacity:0; transform:translateY(40px) scale(0.96); } to { opacity:1; transform:translateY(0) scale(1); } }
+        @keyframes fadeIn { from{ opacity:0; } to{ opacity:1; } }
+        .modal-panel { background:var(--bg-card); border:1.5px solid var(--border-gold); border-radius:var(--radius-xl); box-shadow:var(--shadow-gold-strong); width:780px; max-width:94vw; max-height:84vh; overflow-y:auto; padding:30px 26px; animation:slideUp 0.35s; }
+        @keyframes slideUp { from{ opacity:0; transform:translateY(40px) scale(0.96); } to{ opacity:1; transform:translateY(0) scale(1); } }
         .modal-panel h2 { color:var(--gold-light); margin-bottom:16px; }
         .modal-panel label { display:block; font-size:12px; color:var(--ink-light); margin-bottom:4px; font-weight:600; }
         .modal-panel input[type="text"], .modal-panel textarea, .modal-panel select { width:100%; padding:10px 13px; background:rgba(10,10,20,0.6); border:1px solid var(--border-gold); color:var(--ink-light); border-radius:var(--radius); font-family:inherit; font-size:13px; transition:var(--transition-fast); }
-        .modal-panel input:focus, .modal-panel textarea:focus { outline:none; border-color:var(--gold-light); box-shadow:0 0 16px rgba(240,208,120,0.25); }
         .modal-panel textarea { font-family:var(--font-mono); resize:vertical; }
         .detail-content { margin:14px 0; line-height:1.85; word-break:break-word; }
-        .detail-content img { max-width:100%; border-radius:6px; cursor:pointer; }
         .detail-code pre { background:#0a0c15; padding:16px; border-radius:6px; border:1px solid rgba(77,166,255,0.3); overflow-x:auto; color:#c9d1d9; font-family:var(--font-mono); font-size:13px; position:relative; }
-        .detail-code .copy-detail-btn { position:absolute; top:8px; right:12px; background:rgba(77,166,255,0.2); color:#8cc8ff; border:none; padding:4px 14px; border-radius:4px; cursor:pointer; font-size:11px; transition:var(--transition-fast); }
-        .detail-code .copy-detail-btn:hover { background:rgba(77,166,255,0.4); }
+        .copy-detail-btn { position:absolute; top:8px; right:12px; background:rgba(77,166,255,0.2); color:#8cc8ff; border:none; padding:4px 14px; border-radius:4px; cursor:pointer; font-size:11px; }
         .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
-
         .tab-switcher { display:flex; gap:4px; margin-bottom:6px; }
-        .tab-switcher button { padding:6px 14px; border:1px solid var(--border-gold); border-radius:var(--radius-sm); background:transparent; color:var(--text-dim); cursor:pointer; font-family:inherit; font-size:12px; transition:var(--transition-fast); }
+        .tab-switcher button { padding:6px 14px; border:1px solid var(--border-gold); border-radius:var(--radius-sm); background:transparent; color:var(--text-dim); cursor:pointer; font-size:12px; }
         .tab-switcher button.active { background:rgba(212,168,83,0.18); color:var(--gold-light); border-color:rgba(240,208,120,0.5); }
         .img-preview-area { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
         .img-preview-area .thumb { position:relative; width:72px; height:72px; border:1px solid var(--border-gold); border-radius:4px; overflow:hidden; }
         .img-preview-area .thumb img { width:100%; height:100%; object-fit:cover; }
-        .img-preview-area .thumb .remove-thumb { position:absolute; top:2px; right:2px; background:rgba(200,40,30,0.85); color:#fff; border:none; border-radius:50%; width:18px; height:18px; cursor:pointer; font-size:10px; line-height:1; display:flex; align-items:center; justify-content:center; }
+        .img-preview-area .thumb .remove-thumb { position:absolute; top:2px; right:2px; background:rgba(200,40,30,0.85); color:#fff; border:none; border-radius:50%; width:18px; height:18px; cursor:pointer; font-size:10px; display:flex; align-items:center; justify-content:center; }
 
-        /* Toast */
-        .toast { position:fixed; top:20px; right:20px; z-index:9999; padding:12px 22px; border-radius:var(--radius); color:#fff; font-weight:600; letter-spacing:1.5px; animation:slideInRight 0.35s; pointer-events:none; border:1px solid rgba(255,255,255,0.2); font-size:13px; box-shadow:0 4px 20px rgba(0,0,0,0.4); font-family:inherit; }
-        @keyframes slideInRight { from { transform:translateX(140%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+        .toast { position:fixed; top:20px; right:20px; z-index:9999; padding:12px 22px; border-radius:var(--radius); color:#fff; font-weight:600; letter-spacing:1.5px; animation:slideInRight 0.35s; pointer-events:none; border:1px solid rgba(255,255,255,0.2); font-size:13px; }
+        @keyframes slideInRight { from{ transform:translateX(140%); opacity:0; } to{ transform:translateX(0); opacity:1; } }
         .toast.success { background:#2d5a3d; } .toast.error { background:#5a2d2d; } .toast.info { background:#2d3d5a; }
 
         .lightbox { position:fixed; inset:0; background:rgba(2,2,10,0.94); z-index:10000; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-        .lightbox img { max-width:90vw; max-height:90vh; border-radius:8px; border:2px solid rgba(212,168,83,0.5); box-shadow:0 0 50px rgba(0,0,0,0.6); }
+        .lightbox img { max-width:90vw; max-height:90vh; border-radius:8px; border:2px solid rgba(212,168,83,0.5); }
 
         .back-to-top { position:fixed; bottom:28px; right:28px; z-index:900; width:42px; height:42px; border-radius:50%; background:rgba(20,18,30,0.85); border:1.5px solid var(--border-gold); color:var(--gold-light); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:var(--transition); opacity:0; pointer-events:none; }
         .back-to-top.visible { opacity:1; pointer-events:auto; }
-        .back-to-top:hover { border-color:var(--gold-light); box-shadow:0 0 22px rgba(240,208,120,0.4); transform:translateY(-3px); }
+
+        @media (max-width:768px) {
+            .app-header { flex-direction:column; }
+            .search-bar { flex-direction:column; }
+            .modal-panel { padding:20px 16px; max-height:88vh; }
+        }
     </style>
 </head>
 <body>
@@ -256,21 +213,18 @@
                 <button class="btn btn-ghost btn-sm" onclick="handleLogout()">🚪 归隐</button>
             </div>
         </div>
-
         <div class="search-bar">
             <input type="text" id="searchKeyword" placeholder="🔍 搜题目、编号、标签…" oninput="onSearchInput()">
             <select id="filterCategory" onchange="renderQuestions()"><option value="">📂 万卷归宗</option></select>
             <span class="result-count" id="resultCount"></span>
         </div>
-
-        <div class="stats-bar" id="statsBar">
+        <div class="stats-bar">
             <div class="stat-item">📜 总卷数 <span class="stat-value" id="statTotal">0</span></div>
             <div class="stat-divider"></div>
             <div class="stat-item">📂 分类 <span class="stat-value" id="statCategories">0</span></div>
             <div class="stat-divider"></div>
             <div class="stat-item">📄 当前页 <span class="stat-value" id="statPage">0</span></div>
         </div>
-
         <div class="questions-grid" id="questionsGrid"></div>
         <div class="pagination" id="pagination"></div>
     </div>
@@ -296,18 +250,19 @@
                         <button id="tabPreview" onclick="switchTab('preview')">👁️ 预览</button>
                     </div>
                     <textarea id="qContentSrc" rows="7" oninput="updateEditorStats()"></textarea>
-                    <div id="qContentPreview" style="display:none;min-height:90px;max-height:240px;overflow-y:auto;background:rgba(10,10,20,0.5);border:1px solid var(--border-gold);border-radius:var(--radius);padding:12px;color:var(--text);"></div>
+                    <div id="qContentPreview" style="display:none;min-height:90px;max-height:240px;overflow-y:auto;background:rgba(10,10,20,0.5);border:1px solid var(--border-gold);border-radius:var(--radius);padding:12px;"></div>
                     <div style="font-size:10px;color:var(--text-dim);text-align:right;" id="contentCharCount">0 字</div>
                 </div>
                 <div style="margin-top:14px;">
-                    <label>🖼️ 图卷附件</label>
+                    <label>🖼️ 图卷附件（安全检测）</label>
                     <div style="display:flex;gap:8px;">
                         <input type="file" id="imgFile" accept="image/*" multiple style="display:none;" onchange="uploadImages()">
-                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('imgFile').click()">📁 上传</button>
+                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('imgFile').click()">📁 上传图片</button>
                         <input type="text" id="imgUrl" placeholder="或粘贴图片URL" style="flex:1;">
-                        <button class="btn btn-primary btn-sm" onclick="addImgUrl()">添加</button>
+                        <button class="btn btn-primary btn-sm" onclick="addImgUrl()">添加URL</button>
                     </div>
                     <div class="img-preview-area" id="imgPreview"></div>
+                    <div style="font-size:10px;color:var(--text-dim);margin-top:4px;">支持 jpg/png/webp/gif，单张≤5MB，最多10张，上传即净化</div>
                 </div>
                 <div style="margin-top:14px;">
                     <label>💻 正确代码</label>
@@ -329,9 +284,7 @@
                 <h2 id="detailTitle"></h2>
                 <div class="detail-content" id="detailContent"></div>
                 <div class="detail-code" id="detailCode"></div>
-                <div class="modal-actions">
-                    <button class="btn btn-outline" onclick="closeDetail()">关闭</button>
-                </div>
+                <div class="modal-actions"><button class="btn btn-outline" onclick="closeDetail()">关闭</button></div>
             </div>
         </div>
     </div>
@@ -346,261 +299,251 @@
             const API = 'https://myzlm.serveousercontent.com';
             const PAGE_SIZE = 12;
 
-            // 粒子类（提前定义）
+            // ========== 安全上传配置 ==========
+            const UPLOAD_CONFIG = {
+                MAX_FILE_SIZE: 5 * 1024 * 1024,
+                MAX_TOTAL_IMAGES: 10,
+                ALLOWED_MIME: ['image/jpeg','image/png','image/webp','image/gif'],
+                ALLOWED_EXT: ['.jpg','.jpeg','.png','.webp','.gif'],
+                MAX_DIMENSION: 4096,
+                COMPRESS_WIDTH: 1200,
+                COMPRESS_QUALITY: 0.7
+            };
+
+            // 粒子类（提前定义，避免初始化错误）
             class Particle {
-                constructor(x, y) { this.reset(x, y); }
-                reset(x, y) {
-                    this.x = x ?? Math.random() * canvas.width;
-                    this.y = y ?? Math.random() * canvas.height;
-                    this.size = Math.random() * 2.2 + 0.4;
-                    this.vx = (Math.random() - 0.5) * 0.35;
-                    this.vy = (Math.random() - 0.5) * 0.35;
-                    this.opacity = Math.random() * 0.4 + 0.12;
-                    this.fadeSpeed = Math.random() * 0.003 + 0.0008;
-                    this.hue = Math.random() < 0.55 ? 42 : (Math.random() < 0.5 ? 200 : 280);
-                    this.glow = Math.random() < 0.25;
+                constructor(x,y){ this.reset(x,y); }
+                reset(x,y){
+                    this.x = x ?? Math.random()*canvas.width;
+                    this.y = y ?? Math.random()*canvas.height;
+                    this.size = Math.random()*2.2+0.4;
+                    this.vx = (Math.random()-0.5)*0.35;
+                    this.vy = (Math.random()-0.5)*0.35;
+                    this.opacity = Math.random()*0.4+0.12;
+                    this.fadeSpeed = Math.random()*0.003+0.0008;
+                    this.hue = Math.random()<0.55?42:(Math.random()<0.5?200:280);
+                    this.glow = Math.random()<0.25;
                 }
-                update() {
-                    this.x += this.vx; this.y += this.vy;
-                    this.opacity += (Math.random() - 0.5) * this.fadeSpeed;
+                update(){
+                    this.x+=this.vx; this.y+=this.vy;
+                    this.opacity+=(Math.random()-0.5)*this.fadeSpeed;
                     this.opacity = Math.max(0.04, Math.min(0.55, this.opacity));
-                    if (this.x < -15) this.x = canvas.width + 15;
-                    if (this.x > canvas.width + 15) this.x = -15;
-                    if (this.y < -15) this.y = canvas.height + 15;
-                    if (this.y > canvas.height + 15) this.y = -15;
+                    if(this.x<-15) this.x=canvas.width+15; if(this.x>canvas.width+15) this.x=-15;
+                    if(this.y<-15) this.y=canvas.height+15; if(this.y>canvas.height+15) this.y=-15;
                 }
-                draw(ctx) {
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                draw(ctx){
+                    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
                     ctx.fillStyle = `hsla(${this.hue},60%,62%,${this.opacity})`;
-                    if (this.glow) { ctx.shadowColor = `hsla(${this.hue},70%,58%,${this.opacity*0.65})`; ctx.shadowBlur = 5; }
-                    else ctx.shadowBlur = 0;
-                    ctx.fill(); ctx.shadowBlur = 0;
+                    if(this.glow){ ctx.shadowColor=`hsla(${this.hue},70%,58%,${this.opacity*0.65})`; ctx.shadowBlur=5; }
+                    else ctx.shadowBlur=0;
+                    ctx.fill(); ctx.shadowBlur=0;
                 }
             }
             class SparkParticle {
-                constructor(x, y) {
-                    this.x = x; this.y = y;
-                    const angle = Math.random() * Math.PI*2, speed = Math.random()*3.5+2;
-                    this.vx = Math.cos(angle)*speed; this.vy = Math.sin(angle)*speed;
-                    this.life = 1; this.decay = 0.018 + Math.random()*0.025; this.size = Math.random()*2.2+0.8;
+                constructor(x,y){
+                    this.x=x; this.y=y;
+                    const a=Math.random()*Math.PI*2,s=Math.random()*3.5+2;
+                    this.vx=Math.cos(a)*s; this.vy=Math.sin(a)*s;
+                    this.life=1; this.decay=0.018+Math.random()*0.025; this.size=Math.random()*2.2+0.8;
                 }
-                update() { this.x += this.vx; this.y += this.vy; this.vy += 0.05; this.life -= this.decay; this.size *= 0.985; }
-                draw(ctx) {
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-                    ctx.fillStyle = `hsla(42,85%,58%,${this.life})`;
-                    ctx.shadowColor = `hsla(42,90%,52%,${this.life*0.55})`; ctx.shadowBlur = 7;
-                    ctx.fill(); ctx.shadowBlur = 0;
+                update(){ this.x+=this.vx; this.y+=this.vy; this.vy+=0.05; this.life-=this.decay; this.size*=0.985; }
+                draw(ctx){
+                    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+                    ctx.fillStyle=`hsla(42,85%,58%,${this.life})`;
+                    ctx.shadowColor=`hsla(42,90%,52%,${this.life*0.55})`; ctx.shadowBlur=7;
+                    ctx.fill(); ctx.shadowBlur=0;
                 }
-                get dead() { return this.life <= 0; }
+                get dead(){ return this.life<=0; }
             }
 
             const canvas = document.getElementById('particleCanvas'), ctx = canvas.getContext('2d');
-            let particles = [], mouseParticles = [], particleCount = 80;
+            let particles=[], mouseParticles=[], particleCount=80;
 
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                particleCount = window.innerWidth < 600 ? 40 : 80;
-                if (particles.length > particleCount) particles.length = particleCount;
-                while (particles.length < particleCount) particles.push(new Particle());
+            function resizeCanvas(){
+                canvas.width=innerWidth; canvas.height=innerHeight;
+                particleCount = innerWidth<600?40:80;
+                if(particles.length>particleCount) particles.length=particleCount;
+                while(particles.length<particleCount) particles.push(new Particle());
             }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
+            addEventListener('resize',resizeCanvas); resizeCanvas();
 
-            function burstParticles(x, y) { for (let i=0; i<16; i++) mouseParticles.push(new SparkParticle(x, y)); }
+            function burst(x,y){ for(let i=0;i<16;i++) mouseParticles.push(new SparkParticle(x,y)); }
             document.addEventListener('click', e => {
-                if (e.target.closest('.modal-overlay') || e.target.closest('.lightbox')) return;
-                burstParticles(e.clientX, e.clientY);
+                if(e.target.closest('.modal-overlay')||e.target.closest('.lightbox')) return;
+                burst(e.clientX,e.clientY);
             });
-            function animateParticles() {
+            function animate(){
                 ctx.clearRect(0,0,canvas.width,canvas.height);
-                particles.forEach(p => { p.update(); p.draw(ctx); });
-                mouseParticles.forEach(p => { p.update(); p.draw(ctx); });
-                mouseParticles = mouseParticles.filter(p => !p.dead);
-                requestAnimationFrame(animateParticles);
+                particles.forEach(p=>{p.update();p.draw(ctx);});
+                mouseParticles.forEach(p=>{p.update();p.draw(ctx);});
+                mouseParticles=mouseParticles.filter(p=>!p.dead);
+                requestAnimationFrame(animate);
             }
-            animateParticles();
+            animate();
 
             // 全局状态
-            let allQuestions = [], allCategories = [], allTags = [];
-            let currentUser = null, tempImages = [], currentTab = 'write', currentPage = 1, isLoading = false;
+            let allQuestions=[], allCategories=[], allTags=[];
+            let currentUser=null, tempImages=[], currentTab='write', currentPage=1, isLoading=false;
 
-            const $ = (sel) => document.querySelector(sel);
-            const domRefs = {
-                loginOverlay: $('#loginOverlay'), appContainer: $('#appContainer'),
-                displayUsername: $('#displayUsername'), displayRole: $('#displayRole'),
-                btnAddQuestion: $('#btnAddQuestion'), searchKeyword: $('#searchKeyword'),
-                filterCategory: $('#filterCategory'), resultCount: $('#resultCount'),
-                questionsGrid: $('#questionsGrid'), pagination: $('#pagination'),
-                statTotal: $('#statTotal'), statCategories: $('#statCategories'), statPage: $('#statPage'),
-                editorModal: $('#editorModal'), editId: $('#editId'), qNumber: $('#qNumber'),
-                qName: $('#qName'), qCategory: $('#qCategory'), qTags: $('#qTags'),
-                qContentSrc: $('#qContentSrc'), qContentPreview: $('#qContentPreview'),
-                qCode: $('#qCode'), imgUrl: $('#imgUrl'), imgPreview: $('#imgPreview'),
-                btnSave: $('#btnSave'), editorTitle: $('#editorTitle'),
-                detailModal: $('#detailModal'), detailTitle: $('#detailTitle'),
-                detailContent: $('#detailContent'), detailCode: $('#detailCode'),
-                lightbox: $('#lightbox'), lightboxImg: $('#lightboxImg'),
-                backToTop: $('#backToTop'), tabWrite: $('#tabWrite'), tabPreview: $('#tabPreview'),
-                contentCharCount: $('#contentCharCount'), codeCharCount: $('#codeCharCount'),
-                categoryList: $('#categoryList')
+            const $ = s => document.querySelector(s);
+            const dom = {
+                loginOverlay:$('#loginOverlay'), appContainer:$('#appContainer'),
+                displayUsername:$('#displayUsername'), displayRole:$('#displayRole'),
+                btnAddQuestion:$('#btnAddQuestion'), searchKeyword:$('#searchKeyword'),
+                filterCategory:$('#filterCategory'), resultCount:$('#resultCount'),
+                questionsGrid:$('#questionsGrid'), pagination:$('#pagination'),
+                statTotal:$('#statTotal'), statCategories:$('#statCategories'), statPage:$('#statPage'),
+                editorModal:$('#editorModal'), editId:$('#editId'),
+                qNumber:$('#qNumber'), qName:$('#qName'), qCategory:$('#qCategory'), qTags:$('#qTags'),
+                qContentSrc:$('#qContentSrc'), qContentPreview:$('#qContentPreview'),
+                qCode:$('#qCode'), imgUrl:$('#imgUrl'), imgPreview:$('#imgPreview'),
+                btnSave:$('#btnSave'), editorTitle:$('#editorTitle'),
+                detailModal:$('#detailModal'), detailTitle:$('#detailTitle'),
+                detailContent:$('#detailContent'), detailCode:$('#detailCode'),
+                lightbox:$('#lightbox'), lightboxImg:$('#lightboxImg'), backToTop:$('#backToTop'),
+                tabWrite:$('#tabWrite'), tabPreview:$('#tabPreview'),
+                contentCharCount:$('#contentCharCount'), codeCharCount:$('#codeCharCount'),
+                categoryList:$('#categoryList')
             };
 
-            function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-            function escJs(s) { return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n'); }
-            function showToast(msg, type='info') {
-                const t = document.createElement('div'); t.className = `toast ${type}`; t.textContent = msg;
+            function escHtml(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+            function escJs(s){ return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n'); }
+            function showToast(msg,type='info'){
+                const t=document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg;
                 $('#toastContainer').appendChild(t);
-                setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); },2500);
+                setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),300);},2500);
             }
-            function renderMarkdown(text) {
-                if (!text) return '';
-                try { return marked.parse(text, {breaks:true, gfm:true}); } catch(e) { return escHtml(text); }
+            function renderMarkdown(text){
+                if(!text) return '';
+                try{ return marked.parse(text,{breaks:true,gfm:true}); }catch(e){ return escHtml(text); }
             }
-            async function renderMathMermaid(container) {
-                if (!container) return;
-                if (window.katex && typeof renderMathInElement === 'function') {
-                    try { renderMathInElement(container, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError:false}); } catch(e){}
+            async function renderMathMermaid(container){
+                if(!container) return;
+                if(window.katex && typeof renderMathInElement==='function'){
+                    try{ renderMathInElement(container,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); }catch(e){}
                 }
-                const mermaidEls = container.querySelectorAll('.mermaid');
-                if (mermaidEls.length && window.mermaid) {
-                    try { await mermaid.run({nodes: Array.from(mermaidEls), suppressErrors:true}); } catch(e){}
-                }
-                if (window.hljs) container.querySelectorAll('pre code').forEach(b => { try { hljs.highlightElement(b); } catch(e){} });
+                const mermaidEls=container.querySelectorAll('.mermaid');
+                if(mermaidEls.length && window.mermaid){ try{ await mermaid.run({nodes:Array.from(mermaidEls),suppressErrors:true}); }catch(e){} }
+                if(window.hljs) container.querySelectorAll('pre code').forEach(b=>{ try{hljs.highlightElement(b);}catch(e){} });
             }
-            function copyToClipboard(text, btn) {
-                navigator.clipboard.writeText(text).then(() => {
-                    const orig = btn.textContent; btn.textContent = '✅ 已复制'; btn.style.color='#7ec8a0';
-                    setTimeout(()=>{ btn.textContent = orig; btn.style.color=''; },1500);
-                }).catch(() => {
-                    const ta = document.createElement('textarea'); ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-                    document.body.appendChild(ta); ta.select();
-                    try { document.execCommand('copy'); } catch(e){}
-                    document.body.removeChild(ta);
-                    const orig = btn.textContent; btn.textContent = '✅';
-                    setTimeout(()=>{ btn.textContent = orig; },1500);
+            function copyToClipboard(text,btn){
+                navigator.clipboard.writeText(text).then(()=>{
+                    const orig=btn.textContent; btn.textContent='✅ 已复制'; btn.style.color='#7ec8a0';
+                    setTimeout(()=>{btn.textContent=orig;btn.style.color='';},1500);
+                }).catch(()=>{
+                    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed';ta.style.opacity='0';
+                    document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){}
+                    document.body.removeChild(ta); const orig=btn.textContent; btn.textContent='✅';
+                    setTimeout(()=>{btn.textContent=orig;},1500);
                 });
             }
 
             // 认证
-            async function checkAuth() {
-                try {
-                    const r = await fetch(API+'/api/me', {credentials:'include'});
-                    if (r.ok) { const d = await r.json(); if (d?.username) { currentUser = d; showApp(); return; } }
+            async function checkAuth(){
+                try{
+                    const r=await fetch(API+'/api/me',{credentials:'include'});
+                    if(r.ok){ const d=await r.json(); if(d?.username){ currentUser=d; showApp(); return; } }
                     showLogin();
-                } catch(e) { showLogin(); }
+                }catch(e){ showLogin(); }
             }
-            function showLogin() { domRefs.loginOverlay.classList.remove('hidden'); domRefs.appContainer.classList.remove('active'); }
-            function showApp() {
-                domRefs.loginOverlay.classList.add('hidden'); domRefs.appContainer.classList.add('active');
-                domRefs.displayUsername.textContent = currentUser.username;
-                domRefs.displayRole.textContent = currentUser.role==='admin'?'掌门':'弟子';
-                domRefs.displayRole.classList.toggle('admin', currentUser.role==='admin');
-                domRefs.btnAddQuestion.style.display = currentUser.role==='admin'?'inline-flex':'none';
+            function showLogin(){
+                dom.loginOverlay.classList.remove('hidden'); dom.appContainer.classList.remove('active');
+                document.body.style.overflow='';
+            }
+            function showApp(){
+                dom.loginOverlay.classList.add('hidden'); dom.appContainer.classList.add('active');
+                document.body.style.overflow='';
+                dom.displayUsername.textContent=currentUser.username;
+                dom.displayRole.textContent=currentUser.role==='admin'?'掌门':'弟子';
+                dom.displayRole.classList.toggle('admin', currentUser.role==='admin');
+                dom.btnAddQuestion.style.display = currentUser.role==='admin'?'inline-flex':'none';
                 loadQuestions();
             }
-            async function handleLogin() {
-                const u = document.getElementById('loginUsername').value.trim();
-                const p = document.getElementById('loginPassword').value;
-                if (!u || !p) { document.getElementById('loginError').textContent = '请输入道号和秘钥'; return; }
-                const btn = document.getElementById('btnLogin'); btn.textContent='开启中…'; btn.disabled = true;
-                try {
-                    const r = await fetch(API+'/api/login', {method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body:JSON.stringify({username:u, password:p})});
-                    const d = await r.json();
-                    if (r.ok && d.username) { currentUser = {username:d.username, role:d.role}; showApp(); showToast('卷轴已开启','success'); }
-                    else document.getElementById('loginError').textContent = d.error || '登录失败';
-                } catch(e) { document.getElementById('loginError').textContent = '无法连接服务器'; }
-                finally { btn.textContent='开 启 卷 轴'; btn.disabled = false; }
+            async function handleLogin(){
+                const u=document.getElementById('loginUsername').value.trim();
+                const p=document.getElementById('loginPassword').value;
+                if(!u||!p){ document.getElementById('loginError').textContent='请输入道号和秘钥'; return; }
+                const btn=document.getElementById('btnLogin'); btn.textContent='开启中…'; btn.disabled=true;
+                try{
+                    const r=await fetch(API+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({username:u,password:p})});
+                    const d=await r.json();
+                    if(r.ok && d.username){ currentUser={username:d.username,role:d.role}; showApp(); showToast('卷轴已开启','success'); }
+                    else document.getElementById('loginError').textContent = d.error||'登录失败';
+                }catch(e){ document.getElementById('loginError').textContent='无法连接服务器'; }
+                finally{ btn.textContent='开 启 卷 轴'; btn.disabled=false; }
             }
-            async function handleLogout() {
-                try { await fetch(API+'/api/logout', {method:'POST', credentials:'include'}); } catch(e){}
-                currentUser = null; allQuestions = []; allCategories = []; allTags = []; currentPage = 1;
-                showLogin(); showToast('已归隐','info');
+            async function handleLogout(){
+                try{ await fetch(API+'/api/logout',{method:'POST',credentials:'include'}); }catch(e){}
+                currentUser=null; allQuestions=[]; allCategories=[]; allTags=[]; currentPage=1;
+                showLogin(); document.body.style.overflow=''; showToast('已归隐','info');
             }
 
             // 数据加载
-            async function loadQuestions() {
-                if (isLoading) return;
-                isLoading = true;
-                try {
-                    const r = await fetch(API+'/api/questions', {credentials:'include'});
-                    if (r.status === 401) { handleLogout(); return; }
-                    const d = await r.json();
-                    allQuestions = (d.questions || []).map(q => ({
+            async function loadQuestions(){
+                if(isLoading) return; isLoading=true;
+                try{
+                    const r=await fetch(API+'/api/questions',{credentials:'include'});
+                    if(r.status===401){ handleLogout(); return; }
+                    const d=await r.json();
+                    allQuestions=(d.questions||[]).map(q=>({
                         ...q,
-                        tags: q.tags || (typeof q.tags === 'string' ? q.tags.split(/[,，]/).map(t=>t.trim()).filter(Boolean) : []),
-                        images: q.images || []
+                        tags: q.tags||(typeof q.tags==='string'?q.tags.split(/[,，]/).map(t=>t.trim()).filter(Boolean):[]),
+                        images: q.images||[]
                     }));
-                    // 分类提取
-                    allCategories = d.categories || [];
-                    if (!allCategories.length && allQuestions.length) {
-                        const catSet = new Set(allQuestions.map(q=>q.category).filter(Boolean));
-                        allCategories = Array.from(catSet).sort((a,b)=>a.localeCompare(b));
+                    allCategories = d.categories||[];
+                    if(!allCategories.length && allQuestions.length){
+                        const catSet=new Set(allQuestions.map(q=>q.category).filter(Boolean));
+                        allCategories=Array.from(catSet).sort((a,b)=>a.localeCompare(b));
                     } else allCategories.sort((a,b)=>a.localeCompare(b));
-                    // 标签收集
-                    const tagSet = new Set();
-                    allQuestions.forEach(q => (q.tags||[]).forEach(t=>tagSet.add(t)));
-                    allTags = Array.from(tagSet).sort();
-                    updateCategoryFilter();
-                    renderQuestions();
-                } catch(e) { showToast('加载失败','error'); allQuestions = []; renderQuestions(); }
-                finally { isLoading = false; }
+                    const tagSet=new Set(); allQuestions.forEach(q=>(q.tags||[]).forEach(t=>tagSet.add(t)));
+                    allTags=Array.from(tagSet).sort();
+                    updateCategoryFilter(); renderQuestions();
+                }catch(e){ showToast('加载失败','error'); allQuestions=[]; renderQuestions(); }
+                finally{ isLoading=false; }
             }
-            function updateCategoryFilter() {
-                const sel = domRefs.filterCategory, cv = sel.value;
-                sel.innerHTML = '<option value="">📂 万卷归宗</option>';
-                allCategories.forEach(c => sel.innerHTML += `<option value="${escHtml(c)}" ${cv===c?'selected':''}>📂 ${escHtml(c)}</option>`);
-                domRefs.categoryList.innerHTML = allCategories.map(c => `<option value="${escHtml(c)}">`).join('');
+            function updateCategoryFilter(){
+                const sel=dom.filterCategory, cv=sel.value;
+                sel.innerHTML='<option value="">📂 万卷归宗</option>';
+                allCategories.forEach(c=> sel.innerHTML+=`<option value="${escHtml(c)}" ${cv===c?'selected':''}>📂 ${escHtml(c)}</option>`);
+                dom.categoryList.innerHTML=allCategories.map(c=>`<option value="${escHtml(c)}">`).join('');
             }
-
-            // 排序：先分类字典序，再题号
-            function sortQuestions(list) {
-                return list.sort((a,b) => {
-                    const ca = (a.category||'').toLowerCase(), cb = (b.category||'').toLowerCase();
-                    if (ca !== cb) return ca.localeCompare(cb);
+            function sortQuestions(list){
+                return list.sort((a,b)=>{
+                    const ca=(a.category||'').toLowerCase(), cb=(b.category||'').toLowerCase();
+                    if(ca!==cb) return ca.localeCompare(cb);
                     return (a.number||'').localeCompare(b.number||'');
                 });
             }
-
-            function getFilteredQuestions() {
-                const kw = domRefs.searchKeyword.value.trim().toLowerCase();
-                const cat = domRefs.filterCategory.value;
-                let filtered = allQuestions;
-                if (kw) filtered = filtered.filter(q =>
-                    (q.number||'').toLowerCase().includes(kw) || (q.name||'').toLowerCase().includes(kw) ||
-                    (q.content||'').toLowerCase().includes(kw) || (q.code||'').toLowerCase().includes(kw) ||
-                    (q.category||'').toLowerCase().includes(kw) || (q.tags||[]).some(t=>t.toLowerCase().includes(kw))
+            function getFiltered(){
+                const kw=dom.searchKeyword.value.trim().toLowerCase(), cat=dom.filterCategory.value;
+                let filtered=allQuestions;
+                if(kw) filtered=filtered.filter(q=>
+                    (q.number||'').toLowerCase().includes(kw)||(q.name||'').toLowerCase().includes(kw)||
+                    (q.content||'').toLowerCase().includes(kw)||(q.code||'').toLowerCase().includes(kw)||
+                    (q.category||'').toLowerCase().includes(kw)||(q.tags||[]).some(t=>t.toLowerCase().includes(kw))
                 );
-                if (cat) filtered = filtered.filter(q => q.category === cat);
+                if(cat) filtered=filtered.filter(q=>q.category===cat);
                 return sortQuestions(filtered);
             }
-
-            function renderQuestions() {
-                const filtered = getFilteredQuestions();
-                const totalFiltered = filtered.length;
-                const totalPages = Math.max(1, Math.ceil(totalFiltered / PAGE_SIZE));
-                if (currentPage > totalPages) currentPage = totalPages;
-                const startIdx = (currentPage-1)*PAGE_SIZE;
-                const pageItems = filtered.slice(startIdx, startIdx+PAGE_SIZE);
-
-                domRefs.statTotal.textContent = allQuestions.length;
-                domRefs.statCategories.textContent = allCategories.length;
-                domRefs.statPage.textContent = `${currentPage}/${totalPages}`;
-                domRefs.resultCount.textContent = `共 ${totalFiltered} 卷`;
-
-                const grid = domRefs.questionsGrid;
-                const isAdmin = currentUser?.role === 'admin';
-                if (!pageItems.length) {
-                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-dim);">📭 无匹配之卷</div>';
-                    domRefs.pagination.innerHTML = '';
-                    return;
+            function renderQuestions(){
+                const filtered=getFiltered(), total=filtered.length;
+                const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+                if(currentPage>totalPages) currentPage=totalPages;
+                const start=(currentPage-1)*PAGE_SIZE, pageItems=filtered.slice(start,start+PAGE_SIZE);
+                dom.statTotal.textContent=allQuestions.length;
+                dom.statCategories.textContent=allCategories.length;
+                dom.statPage.textContent=`${currentPage}/${totalPages}`;
+                dom.resultCount.textContent=`共 ${total} 卷`;
+                const grid=dom.questionsGrid, isAdmin=currentUser?.role==='admin';
+                if(!pageItems.length){
+                    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-dim);">📭 无匹配之卷</div>';
+                    dom.pagination.innerHTML=''; return;
                 }
-                grid.innerHTML = pageItems.map((q, idx) => {
-                    const imgs = (q.images&&q.images.length) ? `<div class="card-images-row">${q.images.map(i=>`<img src="${escHtml(i)}" onclick="event.stopPropagation();openLightbox('${escHtml(i)}')">`).join('')}</div>` : '';
-                    const tagsHtml = (q.tags&&q.tags.length) ? `<div class="q-tags">${q.tags.map(t=>`<span class="q-tag" onclick="event.stopPropagation();filterByTag('${escJs(t)}')">#${escHtml(t)}</span>`).join('')}</div>` : '';
-                    const actions = isAdmin ? `<div class="card-actions" onclick="event.stopPropagation()"><button class="btn btn-outline btn-xs" onclick="openEditor('${q.id}')">✏️</button><button class="btn btn-danger btn-xs" onclick="deleteQuestion('${q.id}')">🗑</button></div>` : '';
-                    return `
-                    <div class="question-card" onclick="openDetail('${q.id}')" style="animation-delay:${idx*0.03}s">
+                grid.innerHTML=pageItems.map((q,idx)=>{
+                    const imgs=(q.images&&q.images.length)?`<div class="card-images-row">${q.images.map(i=>`<img src="${escHtml(i)}" onclick="event.stopPropagation();openLightbox('${escHtml(i)}')">`).join('')}</div>`:'';
+                    const tagsHtml=(q.tags&&q.tags.length)?`<div class="q-tags">${q.tags.map(t=>`<span class="q-tag" onclick="event.stopPropagation();filterByTag('${escJs(t)}')">#${escHtml(t)}</span>`).join('')}</div>`:'';
+                    const actions=isAdmin?`<div class="card-actions" onclick="event.stopPropagation()"><button class="btn btn-outline btn-xs" onclick="openEditor('${q.id}')">✏️</button><button class="btn btn-danger btn-xs" onclick="deleteQuestion('${q.id}')">🗑</button></div>`:'';
+                    return `<div class="question-card" onclick="openDetail('${q.id}')" style="animation-delay:${idx*0.03}s">
                         <div class="card-header">
                             ${q.number?`<span class="q-number">#${escHtml(q.number)}</span>`:''}
                             ${q.category?`<span class="q-category">📂 ${escHtml(q.category)}</span>`:''}
@@ -609,205 +552,236 @@
                         ${tagsHtml} ${imgs} ${actions}
                     </div>`;
                 }).join('');
-
-                // 分页
-                let pagHtml = '';
-                if (totalPages > 1) {
-                    pagHtml += `<button ${currentPage===1?'disabled':''} onclick="goToPage(${currentPage-1})">◀ 上一页</button>`;
-                    const maxVis = 5;
-                    let startP = Math.max(1, currentPage - Math.floor(maxVis/2));
-                    let endP = Math.min(totalPages, startP + maxVis - 1);
-                    if (endP - startP < maxVis-1) startP = Math.max(1, endP - maxVis + 1);
-                    if (startP > 1) pagHtml += `<button onclick="goToPage(1)">1</button>`;
-                    if (startP > 2) pagHtml += `<span class="page-info">…</span>`;
-                    for (let i=startP; i<=endP; i++) pagHtml += `<button class="${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
-                    if (endP < totalPages-1) pagHtml += `<span class="page-info">…</span>`;
-                    if (endP < totalPages) pagHtml += `<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
-                    pagHtml += `<button ${currentPage===totalPages?'disabled':''} onclick="goToPage(${currentPage+1})">下一页 ▶</button>`;
+                let pagHtml='';
+                if(totalPages>1){
+                    pagHtml+=`<button ${currentPage===1?'disabled':''} onclick="goToPage(${currentPage-1})">◀ 上一页</button>`;
+                    const maxVis=5; let startP=Math.max(1,currentPage-Math.floor(maxVis/2));
+                    let endP=Math.min(totalPages,startP+maxVis-1);
+                    if(endP-startP<maxVis-1) startP=Math.max(1,endP-maxVis+1);
+                    if(startP>1) pagHtml+=`<button onclick="goToPage(1)">1</button>`;
+                    if(startP>2) pagHtml+=`<span class="page-info">…</span>`;
+                    for(let i=startP;i<=endP;i++) pagHtml+=`<button class="${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+                    if(endP<totalPages-1) pagHtml+=`<span class="page-info">…</span>`;
+                    if(endP<totalPages) pagHtml+=`<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
+                    pagHtml+=`<button ${currentPage===totalPages?'disabled':''} onclick="goToPage(${currentPage+1})">下一页 ▶</button>`;
                 }
-                pagHtml += `<span class="page-info">共 ${totalFiltered} 卷</span>`;
-                domRefs.pagination.innerHTML = pagHtml;
+                pagHtml+=`<span class="page-info">共 ${total} 卷</span>`;
+                dom.pagination.innerHTML=pagHtml;
             }
-
-            function goToPage(page) {
-                const filtered = getFilteredQuestions();
-                const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-                currentPage = Math.max(1, Math.min(page, totalPages));
-                renderQuestions();
-                window.scrollTo({top:0, behavior:'smooth'});
+            function goToPage(page){
+                const filtered=getFiltered(); const totalPages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
+                currentPage=Math.max(1,Math.min(page,totalPages)); renderQuestions();
+                window.scrollTo({top:0,behavior:'smooth'});
             }
 
             // 详情
-            function openDetail(id) {
-                const q = allQuestions.find(q=>q.id===id); if (!q) return;
-                domRefs.detailTitle.innerHTML = `${q.number?'#'+escHtml(q.number)+' ':''}${escHtml(q.name||'')}`;
-                let content = renderMarkdown(q.content||'');
-                if (q.images&&q.images.length) content += `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;">${q.images.map(i=>`<img src="${escHtml(i)}" style="max-width:200px;max-height:150px;border-radius:6px;cursor:pointer;" onclick="openLightbox('${escHtml(i)}')">`).join('')}</div>`;
-                domRefs.detailContent.innerHTML = content;
-                if (q.code) {
-                    domRefs.detailCode.innerHTML = `<h3 style="color:var(--gold-light);">💻 真经</h3><div style="position:relative;"><pre>${escHtml(q.code)}</pre><button class="copy-detail-btn" onclick="copyCodeDirect('${escJs(q.code)}',this)">📋 复制</button></div>`;
-                } else domRefs.detailCode.innerHTML = '';
-                domRefs.detailModal.style.display='block';
-                setTimeout(()=> renderMathMermaid(domRefs.detailContent), 120);
+            function openDetail(id){
+                const q=allQuestions.find(q=>q.id===id); if(!q) return;
+                dom.detailTitle.innerHTML=`${q.number?'#'+escHtml(q.number)+' ':''}${escHtml(q.name||'')}`;
+                let content=renderMarkdown(q.content||'');
+                if(q.images&&q.images.length) content+=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;">${q.images.map(i=>`<img src="${escHtml(i)}" style="max-width:200px;max-height:150px;border-radius:6px;cursor:pointer;" onclick="openLightbox('${escHtml(i)}')">`).join('')}</div>`;
+                dom.detailContent.innerHTML=content;
+                if(q.code) dom.detailCode.innerHTML=`<h3 style="color:var(--gold-light);">💻 真经</h3><div style="position:relative;"><pre>${escHtml(q.code)}</pre><button class="copy-detail-btn" onclick="copyCodeDirect('${escJs(q.code)}',this)">📋 复制</button></div>`;
+                else dom.detailCode.innerHTML='';
+                dom.detailModal.style.display='block'; document.body.style.overflow='hidden';
+                setTimeout(()=>renderMathMermaid(dom.detailContent),120);
             }
-            function closeDetail() { domRefs.detailModal.style.display='none'; }
+            function closeDetail(){ dom.detailModal.style.display='none'; document.body.style.overflow=''; }
 
             // 编辑器
-            function openEditor(id=null) {
-                if (currentUser?.role !== 'admin') return showToast('仅掌门可编辑','error');
-                domRefs.editorModal.style.display='block';
-                domRefs.editId.value = id||'';
-                if (id) {
-                    const q = allQuestions.find(q=>q.id===id); if (!q) return;
-                    domRefs.editorTitle.textContent='✏️ 修缮题目';
-                    domRefs.qNumber.value = q.number||''; domRefs.qName.value = q.name||'';
-                    domRefs.qCategory.value = q.category||''; domRefs.qTags.value = (q.tags||[]).join(', ');
-                    domRefs.qContentSrc.value = q.content||''; domRefs.qCode.value = q.code||'';
-                    tempImages = [...(q.images||[])];
+            function openEditor(id=null){
+                if(currentUser?.role!=='admin') return showToast('仅掌门可编辑','error');
+                dom.editorModal.style.display='block'; document.body.style.overflow='hidden';
+                dom.editId.value=id||'';
+                if(id){
+                    const q=allQuestions.find(q=>q.id===id); if(!q) return;
+                    dom.editorTitle.textContent='✏️ 修缮题目';
+                    dom.qNumber.value=q.number||''; dom.qName.value=q.name||'';
+                    dom.qCategory.value=q.category||''; dom.qTags.value=(q.tags||[]).join(', ');
+                    dom.qContentSrc.value=q.content||''; dom.qCode.value=q.code||'';
+                    tempImages=[...(q.images||[])];
                 } else {
-                    domRefs.editorTitle.textContent='📜 录入新题';
-                    ['qNumber','qName','qCategory','qTags','qContentSrc','qCode','imgUrl'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-                    tempImages = [];
+                    dom.editorTitle.textContent='📜 录入新题';
+                    ['qNumber','qName','qCategory','qTags','qContentSrc','qCode','imgUrl'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+                    tempImages=[];
                 }
                 switchTab('write'); renderImgPreview(); updateEditorStats();
             }
-            function closeEditor() { domRefs.editorModal.style.display='none'; }
-            function switchTab(tab) {
-                currentTab = tab;
-                domRefs.tabWrite.classList.toggle('active', tab==='write');
-                domRefs.tabPreview.classList.toggle('active', tab==='preview');
-                domRefs.qContentSrc.style.display = tab==='write'?'block':'none';
-                if (tab==='preview') {
-                    domRefs.qContentPreview.style.display='block';
-                    domRefs.qContentPreview.innerHTML = renderMarkdown(domRefs.qContentSrc.value);
-                    renderMathMermaid(domRefs.qContentPreview);
-                } else domRefs.qContentPreview.style.display='none';
+            function closeEditor(){ dom.editorModal.style.display='none'; document.body.style.overflow=''; }
+            function switchTab(tab){
+                currentTab=tab;
+                dom.tabWrite.classList.toggle('active',tab==='write');
+                dom.tabPreview.classList.toggle('active',tab==='preview');
+                dom.qContentSrc.style.display = tab==='write'?'block':'none';
+                if(tab==='preview'){
+                    dom.qContentPreview.style.display='block';
+                    dom.qContentPreview.innerHTML=renderMarkdown(dom.qContentSrc.value);
+                    renderMathMermaid(dom.qContentPreview);
+                } else dom.qContentPreview.style.display='none';
             }
-            function updateEditorStats() {
-                domRefs.contentCharCount.textContent = (domRefs.qContentSrc.value||'').length+' 字';
-                domRefs.codeCharCount.textContent = (domRefs.qCode.value||'').length+' 字';
-                if (currentTab==='preview') {
-                    domRefs.qContentPreview.innerHTML = renderMarkdown(domRefs.qContentSrc.value);
-                    renderMathMermaid(domRefs.qContentPreview);
+            function updateEditorStats(){
+                dom.contentCharCount.textContent=(dom.qContentSrc.value||'').length+' 字';
+                dom.codeCharCount.textContent=(dom.qCode.value||'').length+' 字';
+                if(currentTab==='preview'){
+                    dom.qContentPreview.innerHTML=renderMarkdown(dom.qContentSrc.value);
+                    renderMathMermaid(dom.qContentPreview);
                 }
             }
-            function uploadImages() {
+
+            // ===== 安全加固的文件上传 =====
+            function uploadImages(){
                 const files = document.getElementById('imgFile').files;
-                if (!files.length) return;
-                Array.from(files).forEach(f => {
-                    if (!f.type.startsWith('image/')) return;
+                if(!files.length) return;
+                Array.from(files).forEach(file => {
+                    if(tempImages.length >= UPLOAD_CONFIG.MAX_TOTAL_IMAGES) {
+                        showToast(`最多上传${UPLOAD_CONFIG.MAX_TOTAL_IMAGES}张图片`,'error'); return;
+                    }
+                    if(file.size > UPLOAD_CONFIG.MAX_FILE_SIZE) {
+                        showToast(`图片"${file.name}"超过5MB`,'error'); return;
+                    }
+                    if(!UPLOAD_CONFIG.ALLOWED_MIME.includes(file.type)) {
+                        showToast(`不允许的文件类型: ${file.type}`,'error'); return;
+                    }
+                    const ext = '.' + file.name.split('.').pop().toLowerCase();
+                    if(!UPLOAD_CONFIG.ALLOWED_EXT.includes(ext)) {
+                        showToast(`不允许的扩展名: ${ext}`,'error'); return;
+                    }
                     const reader = new FileReader();
+                    reader.onerror = () => showToast(`读取文件"${file.name}"失败`,'error');
                     reader.onload = ev => {
                         const img = new Image();
+                        img.onerror = () => showToast(`"${file.name}"不是有效图片`,'error');
                         img.onload = () => {
-                            const c = document.createElement('canvas'); let w=img.width, h=img.height;
-                            if (w>800) { h = Math.round(h*800/w); w=800; }
-                            c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-                            tempImages.push(c.toDataURL('image/jpeg',0.7)); renderImgPreview();
-                        }; img.src = ev.target.result;
-                    }; reader.readAsDataURL(f);
+                            if(img.width > UPLOAD_CONFIG.MAX_DIMENSION || img.height > UPLOAD_CONFIG.MAX_DIMENSION) {
+                                showToast(`图片尺寸过大(最大${UPLOAD_CONFIG.MAX_DIMENSION}px)`,'error'); return;
+                            }
+                            const c = document.createElement('canvas');
+                            let w=img.width, h=img.height;
+                            if(w > UPLOAD_CONFIG.COMPRESS_WIDTH) { h=Math.round(h*UPLOAD_CONFIG.COMPRESS_WIDTH/w); w=UPLOAD_CONFIG.COMPRESS_WIDTH; }
+                            c.width=w; c.height=h;
+                            const ctx2d=c.getContext('2d');
+                            ctx2d.fillStyle='#FFFFFF'; ctx2d.fillRect(0,0,w,h);
+                            ctx2d.drawImage(img,0,0,w,h);
+                            try {
+                                const sanitized = c.toDataURL('image/jpeg', UPLOAD_CONFIG.COMPRESS_QUALITY);
+                                tempImages.push(sanitized);
+                                renderImgPreview();
+                            } catch(e) { showToast('图片处理失败','error'); }
+                        };
+                        img.src = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
                 });
                 document.getElementById('imgFile').value = '';
             }
-            function addImgUrl() {
-                const url = domRefs.imgUrl.value.trim(); if (!url) return;
-                tempImages.push(url); domRefs.imgUrl.value = ''; renderImgPreview();
+
+            // ===== 安全加固的URL图片添加 =====
+            function addImgUrl(){
+                const url = dom.imgUrl.value.trim();
+                if(!url) return;
+                if(tempImages.length >= UPLOAD_CONFIG.MAX_TOTAL_IMAGES) {
+                    showToast(`最多上传${UPLOAD_CONFIG.MAX_TOTAL_IMAGES}张图片`,'error'); return;
+                }
+                try {
+                    const parsed = new URL(url);
+                    if(!['http:','https:'].includes(parsed.protocol)) {
+                        showToast('仅支持 HTTP/HTTPS 链接','error'); return;
+                    }
+                    const host = parsed.hostname.toLowerCase();
+                    if(host==='localhost'||host==='127.0.0.1'||host.startsWith('192.168.')||host.startsWith('10.')||host.startsWith('172.16.')) {
+                        showToast('不允许引用内网地址','error'); return;
+                    }
+                    const path = parsed.pathname.toLowerCase();
+                    if(!UPLOAD_CONFIG.ALLOWED_EXT.some(ext => path.endsWith(ext)) && !path.includes('?')) {
+                        showToast('URL 看起来不像图片链接','error'); return;
+                    }
+                    // 简单信任通过，后端仍需二次校验
+                    tempImages.push(url);
+                    dom.imgUrl.value = '';
+                    renderImgPreview();
+                } catch(e) { showToast('无效的URL格式','error'); }
             }
-            function removeImg(i) { tempImages.splice(i,1); renderImgPreview(); }
-            function renderImgPreview() {
-                const area = domRefs.imgPreview;
-                if (!tempImages.length) { area.innerHTML = '<span style="font-size:11px;color:var(--text-dim);">暂无图卷</span>'; return; }
-                area.innerHTML = tempImages.map((img,i) => `
+
+            function removeImg(i){ tempImages.splice(i,1); renderImgPreview(); }
+            function renderImgPreview(){
+                const area=dom.imgPreview;
+                if(!tempImages.length){ area.innerHTML='<span style="font-size:11px;color:var(--text-dim);">暂无图卷</span>'; return; }
+                area.innerHTML = tempImages.map((img,i)=>`
                     <div class="thumb"><img src="${escHtml(img)}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%2272%22><rect fill=%22%23111%22 width=%2272%22 height=%2272%22/><text x=%2214%22 y=%2240%22 fill=%22%23888%22 font-size=%2210%22>破损</text></svg>'"><button class="remove-thumb" onclick="removeImg(${i})">×</button></div>
                 `).join('');
             }
-            async function saveQuestion() {
-                const editId = domRefs.editId.value;
-                const number = domRefs.qNumber.value.trim(), name = domRefs.qName.value.trim();
-                if (!number || !name) return showToast('题号与题名必填','error');
-                const tagsRaw = domRefs.qTags.value.trim();
-                const data = {
+
+            async function saveQuestion(){
+                const editId=dom.editId.value, number=dom.qNumber.value.trim(), name=dom.qName.value.trim();
+                if(!number||!name) return showToast('题号与题名必填','error');
+                const tagsRaw=dom.qTags.value.trim();
+                const data={
                     number, name,
-                    category: domRefs.qCategory.value.trim(),
+                    category: dom.qCategory.value.trim(),
                     tags: tagsRaw ? tagsRaw.split(/[,，]/).map(t=>t.trim()).filter(Boolean) : [],
-                    content: domRefs.qContentSrc.value,
-                    code: domRefs.qCode.value,
+                    content: dom.qContentSrc.value,
+                    code: dom.qCode.value,
                     images: [...tempImages]
                 };
-                domRefs.btnSave.textContent='收录中…'; domRefs.btnSave.disabled=true;
-                try {
+                dom.btnSave.textContent='收录中…'; dom.btnSave.disabled=true;
+                try{
                     const url = editId ? `${API}/api/questions/${encodeURIComponent(editId)}` : `${API}/api/questions`;
                     const method = editId?'PUT':'POST';
                     const r = await fetch(url, {method, headers:{'Content-Type':'application/json'}, credentials:'include', body:JSON.stringify(data)});
-                    if (r.status===401) { handleLogout(); return; }
-                    const d = await r.json();
-                    if (r.ok && (d.success||d.question)) { closeEditor(); await loadQuestions(); showToast(editId?'修缮成功':'新题收录','success'); }
+                    if(r.status===401){ handleLogout(); return; }
+                    const d=await r.json();
+                    if(r.ok && (d.success||d.question)){ closeEditor(); await loadQuestions(); showToast(editId?'修缮成功':'新题收录','success'); }
                     else showToast(d.error||'保存失败','error');
-                } catch(e) { showToast('网络错误','error'); }
-                finally { domRefs.btnSave.textContent='💾 收录入库'; domRefs.btnSave.disabled=false; }
+                }catch(e){ showToast('网络错误','error'); }
+                finally{ dom.btnSave.textContent='💾 收录入库'; dom.btnSave.disabled=false; }
             }
-            async function deleteQuestion(id) {
-                if (!confirm('确定焚毁此题？')) return;
-                try {
-                    const r = await fetch(`${API}/api/questions/${encodeURIComponent(id)}`, {method:'DELETE', credentials:'include'});
-                    if (r.status===401) { handleLogout(); return; }
-                    if (r.ok) { await loadQuestions(); showToast('已焚毁','info'); }
-                } catch(e) { showToast('删除失败','error'); }
+            async function deleteQuestion(id){
+                if(!confirm('确定焚毁此题？')) return;
+                try{
+                    const r=await fetch(`${API}/api/questions/${encodeURIComponent(id)}`,{method:'DELETE',credentials:'include'});
+                    if(r.status===401){ handleLogout(); return; }
+                    if(r.ok){ await loadQuestions(); showToast('已焚毁','info'); }
+                }catch(e){ showToast('删除失败','error'); }
             }
-            function openLightbox(src) { domRefs.lightboxImg.src=src; domRefs.lightbox.style.display='flex'; }
-            function closeLightbox() { domRefs.lightbox.style.display='none'; }
+            function openLightbox(src){ dom.lightboxImg.src=src; dom.lightbox.style.display='flex'; document.body.style.overflow='hidden'; }
+            function closeLightbox(){ dom.lightbox.style.display='none'; document.body.style.overflow=''; }
 
-            // 搜索
             let searchTimer;
-            function onSearchInput() {
-                clearTimeout(searchTimer);
-                searchTimer = setTimeout(() => { currentPage = 1; renderQuestions(); }, 300);
-            }
-            function filterByTag(tag) { domRefs.searchKeyword.value = ''; currentPage=1; renderQuestions(); } // 简化，实际可保持标签筛选
+            function onSearchInput(){ clearTimeout(searchTimer); searchTimer=setTimeout(()=>{ currentPage=1; renderQuestions(); },300); }
+            function filterByTag(tag){ dom.searchKeyword.value=''; currentPage=1; renderQuestions(); }
 
-            // 回到顶部
-            window.addEventListener('scroll', () => { domRefs.backToTop.classList.toggle('visible', window.scrollY > 500); }, {passive:true});
-
-            // 键盘快捷键
-            document.addEventListener('keydown', e => {
-                if (e.key==='Escape') {
-                    if (domRefs.lightbox.style.display==='flex') closeLightbox();
-                    else if (domRefs.detailModal.style.display==='block') closeDetail();
-                    else if (domRefs.editorModal.style.display==='block') closeEditor();
+            window.addEventListener('scroll', ()=>{ dom.backToTop.classList.toggle('visible', scrollY>500); }, {passive:true});
+            document.addEventListener('keydown', e=>{
+                if(e.key==='Escape'){
+                    if(dom.lightbox.style.display==='flex') closeLightbox();
+                    else if(dom.detailModal.style.display==='block') closeDetail();
+                    else if(dom.editorModal.style.display==='block') closeEditor();
                 }
-                if ((e.ctrlKey||e.metaKey) && e.key==='k') { e.preventDefault(); domRefs.searchKeyword.focus(); }
-                if (!e.target.closest('input,textarea,select') && !e.ctrlKey && !e.metaKey) {
-                    if (e.key==='ArrowLeft') goToPage(currentPage-1);
-                    if (e.key==='ArrowRight') goToPage(currentPage+1);
+                if((e.ctrlKey||e.metaKey)&&e.key==='k'){ e.preventDefault(); dom.searchKeyword.focus(); }
+                if(!e.target.closest('input,textarea,select')&&!e.ctrlKey&&!e.metaKey){
+                    if(e.key==='ArrowLeft') goToPage(currentPage-1);
+                    if(e.key==='ArrowRight') goToPage(currentPage+1);
                 }
             });
 
-            // 初始化
-            document.addEventListener('DOMContentLoaded', () => {
+            document.addEventListener('DOMContentLoaded', ()=>{
                 checkAuth();
                 document.getElementById('btnLogin').addEventListener('click', handleLogin);
-                document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key==='Enter') handleLogin(); });
+                document.getElementById('loginPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') handleLogin(); });
             });
 
-            // 全局暴露
-            window.goToPage = goToPage;
-            window.copyCodeDirect = function(code, btn) { copyToClipboard(code, btn); };
-            window.filterByTag = filterByTag;
-            window.openDetail = openDetail;
-            window.closeDetail = closeDetail;
-            window.openEditor = openEditor;
-            window.closeEditor = closeEditor;
-            window.switchTab = switchTab;
-            window.uploadImages = uploadImages;
-            window.addImgUrl = addImgUrl;
-            window.removeImg = removeImg;
-            window.saveQuestion = saveQuestion;
-            window.deleteQuestion = deleteQuestion;
-            window.openLightbox = openLightbox;
-            window.closeLightbox = closeLightbox;
-            window.handleLogout = handleLogout;
-            window.onSearchInput = onSearchInput;
-            window.renderQuestions = renderQuestions;
+            window.goToPage=goToPage;
+            window.copyCodeDirect=function(code,btn){ copyToClipboard(code,btn); };
+            window.filterByTag=filterByTag;
+            window.openDetail=openDetail; window.closeDetail=closeDetail;
+            window.openEditor=openEditor; window.closeEditor=closeEditor;
+            window.switchTab=switchTab;
+            window.uploadImages=uploadImages; window.addImgUrl=addImgUrl;
+            window.removeImg=removeImg; window.saveQuestion=saveQuestion;
+            window.deleteQuestion=deleteQuestion;
+            window.openLightbox=openLightbox; window.closeLightbox=closeLightbox;
+            window.handleLogout=handleLogout;
+            window.onSearchInput=onSearchInput; window.renderQuestions=renderQuestions;
         })();
     </script>
 </body>
